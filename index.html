@@ -1,1 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agrinho - Quiz Sustentável</title>
 
+<style>
+    body{
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #4CAF50, #8BC34A);
+        margin:0;
+        padding:0;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+    }
+
+    .container{
+        background:white;
+        width:90%;
+        max-width:600px;
+        padding:30px;
+        border-radius:20px;
+        box-shadow:0 0 20px rgba(0,0,0,0.2);
+        text-align:center;
+    }
+
+    h1{
+        color:#2E7D32;
+    }
+
+    #question{
+        font-size:22px;
+        margin:20px 0;
+    }
+
+    .btn{
+        display:block;
+        width:100%;
+        margin:10px 0;
+        padding:15px;
+        border:none;
+        border-radius:10px;
+        background:#4CAF50;
+        color:white;
+        font-size:18px;
+        cursor:pointer;
+        transition:0.3s;
+    }
+
+    .btn:hover{
+        background:#2E7D32;
+    }
+
+    #nextBtn{
+        background:#2196F3;
+        display:none;
+    }
+
+    #score{
+        font-size:24px;
+        color:#2E7D32;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🌱 Quiz Agrinho 🌱</h1>
+
+    <div id="quiz">
+        <div id="question">Pergunta aqui</div>
+
+        <div id="answers"></div>
+
+        <button id="nextBtn" class="btn">Próxima</button>
+    </div>
+
+    <div id="score"></div>
+
+</div>
+
+<script>
+
+const questions = [
+{
+    question: "Qual atitude ajuda a economizar água no campo?",
+    answers: [
+        {text: "Deixar torneiras abertas", correct:false},
+        {text: "Usar irrigação inteligente", correct:true},
+        {text: "Desperdiçar água", correct:false},
+        {text: "Lavar calçadas diariamente", correct:false}
+    ]
+},
+
+{
+    question: "O que é reciclagem?",
+    answers: [
+        {text: "Jogar lixo no rio", correct:false},
+        {text: "Queimar plástico", correct:false},
+        {text: "Reutilizar materiais", correct:true},
+        {text: "Enterrar lixo", correct:false}
+    ]
+},
+
+{
+    question: "Qual energia é sustentável?",
+    answers: [
+        {text: "Energia solar", correct:true},
+        {text: "Poluição", correct:false},
+        {text: "Queima de lixo", correct:false},
+        {text: "Desmatamento", correct:false}
+    ]
+},
+
+{
+    question: "Por que devemos preservar as árvores?",
+    answers: [
+        {text: "Para aumentar a poluição", correct:false},
+        {text: "Porque ajudam o meio ambiente", correct:true},
+        {text: "Para acabar com os animais", correct:false},
+        {text: "Não devemos preservar", correct:false}
+    ]
+}
+
+];
+
+const questionElement = document.getElementById("question");
+const answersElement = document.getElementById("answers");
+const nextBtn = document.getElementById("nextBtn");
+const scoreElement = document.getElementById("score");
+
+let currentQuestion = 0;
+let score = 0;
+
+function startQuiz(){
+    currentQuestion = 0;
+    score = 0;
+    nextBtn.innerHTML = "Próxima";
+    showQuestion();
+}
+
+function showQuestion(){
+    resetState();
+
+    let current = questions[currentQuestion];
+    questionElement.innerHTML = current.question;
+
+    current.answers.forEach(answer => {
+        const button = document.createElement("button");
+        button.innerHTML = answer.text;
+        button.classList.add("btn");
+        answersElement.appendChild(button);
+
+        if(answer.correct){
+            button.dataset.correct = answer.correct;
+        }
+
+        button.addEventListener("click", selectAnswer);
+    });
+}
+
+function resetState(){
+    nextBtn.style.display = "none";
+
+    while(answersElement.firstChild){
+        answersElement.removeChild(answersElement.firstChild);
+    }
+}
+
+function selectAnswer(e){
+    const selectedBtn = e.target;
+    const correct = selectedBtn.dataset.correct === "true";
+
+    if(correct){
+        selectedBtn.style.background = "green";
+        score++;
+    } else {
+        selectedBtn.style.background = "red";
+    }
+
+    Array.from(answersElement.children).forEach(button => {
+        if(button.dataset.correct === "true"){
+            button.style.background = "green";
+        }
+
+        button.disabled = true;
+    });
+
+    nextBtn.style.display = "block";
+}
+
+function showScore(){
+    resetState();
+
+    questionElement.innerHTML = `🎉 Você acertou ${score} de ${questions.length}!`;
+
+    scoreElement.innerHTML = score >= 3
+        ? "🌿 Parabéns! Você entende de sustentabilidade!"
+        : "🌱 Continue aprendendo sobre o meio ambiente!";
+
+    nextBtn.innerHTML = "Jogar Novamente";
+    nextBtn.style.display = "block";
+}
+
+function handleNextButton(){
+    currentQuestion++;
+
+    if(currentQuestion < questions.length){
+        showQuestion();
+    } else {
+        showScore();
+    }
+}
+
+nextBtn.addEventListener("click", () => {
+
+    if(currentQuestion < questions.length){
+        handleNextButton();
+    } else {
+        startQuiz();
+    }
+
+});
+
+startQuiz();
+
+</script>
+
+</body>
+</html>
