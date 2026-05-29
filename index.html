@@ -3,160 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoQuest: Guardiões do Campo (Agrinho)</title>
-    <style>
-        :root {
-            --primary-color: #2e7d32;
-            --secondary-color: #81c784;
-            --background-color: #f1f8e9;
-            --text-color: #333;
-            --card-bg: #ffffff;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #game-container {
-            max-width: 800px;
-            width: 100%;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        header {
-            text-align: center;
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .hud {
-            display: flex;
-            justify-content: space-between;
-            background: #e8f5e9;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        #scenario-image {
-            width: 100%;
-            height: 250px;
-            background-color: #ddd;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-style: italic;
-            color: #666;
-            margin-bottom: 20px;
-            border: 2px solid var(--secondary-color);
-        }
-
-        #story-text {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            text-align: left;
-        }
-
-        button:hover {
-            background-color: #1b5e20;
-            transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+    <title>EcoQuest: Guardiões da Natureza</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div id="game-container">
+    <div class="game-container">
         <header>
-            <h1>EcoQuest: Guardiões do Campo</h1>
-            <p>Uma aventura de conscientização ambiental e sustentabilidade</p>
+            <h1>EcoQuest: O Despertar da Consciência</h1>
+            <div id="status-bar">
+                <span>Pontos de Consciência: <strong id="score">0</strong></span>
+            </div>
         </header>
-
-        <div class="hud">
-            <div>Jogador: <span id="hud-name">-</span></div>
-            <div>Pontos de Consciência: <span id="hud-score">0</span></div>
-            <div>Fase: <span id="hud-phase">1/3</span></div>
-        </div>
-
-        <div id="intro-screen">
-            <h3>Bem-vindo ao Desafio Agrinho!</h3>
-            <p>Insira seu nome para iniciar a jornada pedagógica pela preservação das nossas bacias hidrográficas e solo.</p>
-            <input type="text" id="player-name-input" placeholder="Digite seu nome..." style="padding: 10px; width: 80%; max-width: 300px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;"><br>
-            <button id="start-btn" style="text-align: center;">Iniciar Aventura</button>
-        </div>
-
-        <div id="game-screen" class="hidden">
-            <div id="scenario-image">Visualização do Cenário Ativo</div>
-            <div id="story-text">Carregando história...</div>
-            <div id="options-box" class="options-container">
+        
+        <main>
+            <div id="story-text" class="story-box">
                 </div>
-        </div>
-
-        <div id="end-screen" class="hidden" style="text-align: center;">
-            <h2>Aventura Concluída!</h2>
-            <p id="final-evaluation"></p>
-            <button onclick="location.reload()" style="text-align: center;">Jogar Novamente</button>
-        </div>
+            <div id="choice-buttons" class="choices-box">
+                </div>
+        </main>
+        
+        <footer>
+            <p>Projeto Desenvolvido para o Concurso Agrinho</p>
+        </footer>
     </div>
 
-    <script>
-        /**
-         * ====================================================================
-         * ABSTRAÇÃO E COMPLEXIDADE: PROGRAMAÇÃO ORIENTADA A OBJETOS (POO)
-         * ====================================================================
-         */
-
-        // 1. Abstração do Jogador (Encapsulamento de dados e estado)
-        class Player {
-            constructor(name) {
-                this.name = name;
-                this.score = 0;
-                this.currentPhaseIndex = 0;
-            }
-
-            addPoints(points) {
-                this.score += points;
-                if (this.score < 0) this.score = 0;
-            }
-        }
-
-        // 2. Ab
+    <script src="script.js"></script>
+</body>
+</html>
