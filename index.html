@@ -3,27 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoQuest: Guardiões da Natureza</title>
+    <title>Defensores da Natureza: Missão Agrinho</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <header>
-            <h1>EcoQuest: O Despertar da Consciência</h1>
-            <div id="status-bar">
-                <span>Pontos de Consciência: <strong id="score">0</strong></span>
-            </div>
+            <h1>Missão Agrinho: Fazenda Sustentável</h1>
+            <p>Turno: <span id="turno-atual">1</span>/10</p>
         </header>
-        
-        <main>
-            <div id="story-text" class="story-box">
-                </div>
-            <div id="choice-buttons" class="choices-box">
-                </div>
-        </main>
-        
+
+        <section class="status-panel">
+            <div class="status-card">
+                <h3>Produção</h3>
+                <p id="status-producao">100%</p>
+            </div>
+            <div class="status-card">
+                <h3>Saúde do Solo</h3>
+                <p id="status-solo">100%</p>
+            </div>
+            <div class="status-card">
+                <h3>Biodiversidade</h3>
+                <p id="status-biodiversidade">100%</p>
+            </div>
+            <div class="status-card">
+                <h3>Orçamento</h3>
+                <p>R$ <span id="status-moedas">500</span></p>
+            </div>
+        </section>
+
+        <section class="event-log">
+            <h2>Alerta de Campo</h2>
+            <p id="texto-evento">Bem-vindo à sua fazenda! Sua missão é produzir mantendo o meio ambiente em equilíbrio. Clique em "Próximo Turno" para começar os desafios.</p>
+        </section>
+
+        <section class="action-panel">
+            <h2>Ações de Manejo (Custo: R$ 150)</h2>
+            <div class="buttons-grid">
+                <button onclick="jogarAcao('rotacao')">Rotação de Culturas</button>
+                <button onclick="jogarAcao('biologico')">Controle Biológico (Joaninhas)</button>
+                <button onclick="jogarAcao('floresta')">Plantar Mata Ciliar</button>
+                <button onclick="jogarAcao('quimico')">Agrotóxico Intensivo</button>
+            </div>
+        </section>
+
         <footer>
-            <p>Projeto Desenvolvido para o Concurso Agrinho</p>
+            <button id="btn-proximo" onclick="proximoTurno()">Avançar Turno</button>
         </footer>
     </div>
 
