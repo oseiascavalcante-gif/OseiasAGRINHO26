@@ -1,117 +1,134 @@
-// Estado Inicial do Jogo
-let turno = 1;
-let producao = 100;
-let solo = 100;
-let biodiversidade = 100;
-let moedas = 500;
-
-// Lista de eventos baseados em problemas agrícolas reais
-const eventos = [
+// Banco de Dados dos Inimigos e da Lore Pedagógica Desbloqueada por Abate/Piedade
+const enemyDatabase = [
     {
-        texto: "ATENÇÃO: Uma infestação de pulgões surgiu na lavoura de soja!",
-        tipo: "praga"
+        name: "Gárgula da Erosão",
+        sprite: "🏜️",
+        hp: 100,
+        actText: "* Você decide fazer o terraceamento mecânico e plantar árvores nativas nas encostas para segurar o solo.",
+        spawnText: "* A Gárgula da Erosão impede o avanço! O solo está rachado e desprotegido.",
+        loreTitle: "Crônica I: O Escudo da Terra (Curitiba, PR)",
+        loreText: "Registros antigos mostram que o Paraná perdeu toneladas de terra fértil antes da chegada do plantio direto e das curvas de nível. Ao pacificar ou conter a erosão, descobrimos que manter o solo coberto com palhada reduz o impacto da chuva em até 90%. O Agro forte nasce protegendo a base de tudo."
     },
     {
-        texto: "ALERTA: Chuvas intensas começaram. Há risco de erosão severa no solo descoberto.",
-        tipo: "clima"
+        name: "Espírito da Água Turva",
+        sprite: "🌊",
+        hp: 120,
+        actText: "* Você inicia o isolamento das fontes e o plantio de mata ciliar nas margens dos rios da propriedade.",
+        spawnText: "* O Espírito da Água Turva surge chorando defensivos químicos e resíduos industriais.",
+        loreTitle: "Crônica II: As Veias do Estado Hídrico",
+        loreText: "A água que abastece as cidades nasce no interior de pequenas propriedades rurais. Quando o produtor protege as matas ciliares (Mata de Galeria), ele impede que defensivos ou terra caiam no leito dos rios. Preservar as bacias hidrográficas do Paraná garante energia barata e alimentos puros."
     },
     {
-        texto: "INFORME: Pragas menores surgiram, mas os predadores naturais estão tentando controlar.",
-        tipo: "equilibrio"
+        name: "Titã do Desperdício",
+        sprite: "🗑️",
+        hp: 150,
+        actText: "* Você implementa sensores automáticos de irrigação por gotejamento e compostagem orgânica de restos de grãos.",
+        spawnText: "* O Titã do Desperdício espalha fumaça de queimadas e queima recursos preciosos.",
+        loreTitle: "Crônica III: O Amanhã Conectado",
+        loreText: "A tecnologia no campo não serve apenas para produzir mais, mas para erradicar o desperdício. O equilíbrio moderno usa tratores guiados por GPS e drones agrícolas para aplicar insumos na quantidade milimétrica necessária. O futuro sustentável une o conhecimento tradicional à inteligência dos dados digitais."
     }
 ];
 
-let eventoAtual = eventos[0];
+let currentEnemyIndex = 0;
+let currentEnemy = null;
+let enemyHP = 100;
+let enemyMercy = 0;
 
-function atualizarInterface() {
-    document.getElementById("turno-atual").innerText = turno;
-    document.getElementById("status-producao").innerText = producao + "%";
-    document.getElementById("status-solo").innerText = solo + "%";
-    document.getElementById("status-biodiversidade").innerText = biodiversidade + "%";
-    document.getElementById("status-moedas").innerText = moedas;
-}
+const dbBox = document.getElementById("dialogue-box");
+const hpFill = document.getElementById("enemy-hp-fill");
+const mercyFill = document.getElementById("enemy-mercy-fill");
+const spareBtn = document.getElementById("spare-btn");
+const spriteEl = document.getElementById("enemy-sprite");
+const nameEl = document.getElementById("enemy-name");
 
-function jogarAcao(acao) {
-    if (moedas < 150) {
-        alert("Orçamento insuficiente para realizar manejos neste turno!");
+function loadEnemy() {
+    if (currentEnemyIndex >= enemyDatabase.length) {
+        dbBox.innerHTML = "* Parabéns! Você limpou toda a corrupção da região e garantiu o Futuro Sustentável do Agro! O Selo Ouro do Agrinho é seu.";
+        document.querySelectorAll(".menu-btn").forEach(b => b.disabled = true);
+        nameEl.innerText = "Vitória Total!";
+        spriteEl.innerHTML = "🏆";
         return;
     }
 
-    moedas -= 150; // Custo de qualquer ação ecológica ou corretiva
+    currentEnemy = enemyDatabase[currentEnemyIndex];
+    enemyHP = currentEnemy.hp;
+    enemyMercy = 0;
 
-    if (acao === 'rotacao') {
-        solo = Math.min(100, solo + 25);
-        producao = Math.min(100, producao + 10);
-        document.getElementById("texto-evento").innerText = "Sucesso! A rotação de culturas quebrou o ciclo de pragas e nutriu o solo naturalmente.";
-    } 
-    else if (acao === 'biologico') {
-        biodiversidade = Math.min(100, biodiversidade + 20);
-        producao = Math.min(100, producao + 15);
-        document.getElementById("texto-evento").innerText = "Excelente! As joaninhas controlaram os pulgões sem agredir o meio ambiente.";
-    } 
-    else if (acao === 'floresta') {
-        biodiversidade = Math.min(100, biodiversidade + 30);
-        solo = Math.min(100, solo + 15);
-        document.getElementById("texto-evento").innerText = "Ótima escolha! A mata ciliar protege os rios e atrai polinizadores e predadores naturais.";
-    } 
-    else if (acao === 'quimico') {
-        // O agrotóxico resolve a produção no curto prazo, mas destrói o ecossistema
-        producao = Math.min(100, producao + 20);
-        biodiversidade = Math.max(0, biodiversidade - 40);
-        solo = Math.max(0, solo - 20);
-        document.getElementById("texto-evento").innerText = "Cuidado! O agrotóxico eliminou as pragas, mas reduziu drasticamente a biodiversidade e enfraqueceu o solo.";
-    }
+    nameEl.innerText = currentEnemy.name;
+    spriteEl.innerHTML = currentEnemy.sprite;
+    dbBox.innerHTML = currentEnemy.spawnText;
 
-    atualizarInterface();
+    updateBars();
 }
 
-function proximoTurno() {
-    if (turno >= 10) {
-        finalizarJogo();
-        return;
-    }
+function updateBars() {
+    const hpPercent = (enemyHP / currentEnemy.hp) * 100;
+    hpFill.style.width = Math.max(0, hpPercent) + "%";
+    mercyFill.style.width = enemyMercy + "%";
 
-    turno++;
-    moedas += 200; // Renda gerada a cada turno pela fazenda
-
-    // Aplica consequências automáticas baseadas no estado da fazenda
-    if (biodiversidade < 50) {
-        producao = Math.max(0, producao - 15); // Sem biodiversidade, surgem mais pragas
-        document.getElementById("texto-evento").innerText = "Efeito colateral: Baixa biodiversidade causou um surto de pragas secundárias. A produção caiu!";
-    } else if (solo < 50) {
-        producao = Math.max(0, producao - 20); // Solo infértil reduz colheita
-        document.getElementById("texto-evento").innerText = "Efeito colateral: O solo está degradado e as plantas não conseguem crescer com vigor.";
+    // Libera botão SPARE se a barra de Mercy (Piedade) atingir 100%
+    if (enemyMercy >= 100) {
+        spareBtn.disabled = false;
+        spareBtn.style.color = "#e6ff00";
+        spareBtn.style.borderColor = "#e6ff00";
     } else {
-        // Escolhe um evento aleatório para o novo turno
-        let rand = Math.floor(Math.random() * eventos.length);
-        eventoAtual = eventos[rand];
-        document.getElementById("texto-evento").innerText = eventoAtual.texto;
-        
-        // Penalidades iniciais do evento se não tratado
-        if (eventoAtual.tipo === "praga") producao = Math.max(0, producao - 10);
-        if (eventoAtual.tipo === "clima") solo = Math.max(0, solo - 15);
+        spareBtn.disabled = true;
+        spareBtn.style.color = "#333";
+        spareBtn.style.borderColor = "#222";
     }
-
-    atualizarInterface();
 }
 
-function finalizarJogo() {
-    let pontuacaoFinal = producao + solo + biodiversidade;
-    let mensagemFinal = "";
+// Ação 1: Lutar
+function handleAttack() {
+    spriteEl.style.transform = "scale(0.8)";
+    setTimeout(() => spriteEl.style.transform = "scale(1)", 200);
 
-    if (pontuacaoFinal >= 250) {
-        mensagemFinal = `Nota Máxima no Agrinho! 🏆 Pontuação: ${pontuacaoFinal}. Você provou que a sustentabilidade e a tecnologia andam juntas! Sua fazenda é próspera e o meio ambiente está protegido.`;
-    } else if (pontuacaoFinal >= 150) {
-        mensagemFinal = `Bom trabalho! Pontuação: ${pontuacaoFinal}. Sua fazenda produziu bem, mas com alguns prejuízos ao solo ou fauna locais. Tente usar mais controle biológico na próxima!`;
-    } else {
-        mensagemFinal = `Alerta de Crise Ambiental! ⚠️ Pontuação: ${pontuacaoFinal}. O uso excessivo de químicos ou a falta de manejo destruíram os recursos naturais. Lembre-se das lições do Agrinho sobre conservação!`;
+    const damage = 35;
+    enemyHP -= damage;
+    dbBox.innerHTML = `* Você atacou a criatura! Causou ${damage} de dano mecânico direto. Ela cambaleia com agressividade.`;
+    
+    updateBars();
+
+    if (enemyHP <= 0) {
+        setTimeout(() => triggerLoreReveal("defeat"), 800);
     }
-
-    alert(mensagemFinal);
-    // Reinicia o jogo
-    turno = 1; producao = 100; solo = 100; biodiversidade = 100; moedas = 500;
-    atualizarInterface();
 }
 
-// Inicializa a tela
-atualizarInterface();
+// Ação 2: Agir
+function handleAct() {
+    spriteEl.style.transform = "translateY(-10px)";
+    setTimeout(() => spriteEl.style.transform = "translateY(0)", 200);
+
+    enemyMercy += 50; 
+    dbBox.innerHTML = currentEnemy.actText;
+
+    updateBars();
+}
+
+// Ação 3: Poupar/Salvar
+function handleSpare() {
+    dbBox.innerHTML = `* Você poupou ${currentEnemy.name}! A criatura sorri em paz e se torna uma força protetora da natureza local.`;
+    setTimeout(() => triggerLoreReveal("spare"), 1000);
+}
+
+// Abre o pop-up com as crônicas e dados reais do Agrinho
+function triggerLoreReveal(method) {
+    const overlay = document.getElementById("lore-overlay");
+    const titleEl = document.getElementById("lore-title");
+    const textEl = document.getElementById("lore-text");
+
+    let prefix = method === "spare" ? "✨ Criatura Pacificada! " : "⚔️ Criatura Abatida! ";
+    titleEl.innerText = prefix + currentEnemy.loreTitle;
+    textEl.innerText = currentEnemy.loreText;
+
+    overlay.style.display = "flex";
+}
+
+function closeLore() {
+    document.getElementById("lore-overlay").style.display = "none";
+    currentEnemyIndex++; 
+    loadEnemy();
+}
+
+// Inicia o jogo rodando a primeira entidade do banco de dados
+loadEnemy();
