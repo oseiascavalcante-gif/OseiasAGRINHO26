@@ -8,16 +8,19 @@ body {
 
 /* 🎬 INTRO */
 #intro {
-  display: none;
+  display: flex;
   height: 100vh;
+  background: black;
   align-items: center;
   justify-content: center;
-}
+};
+
 
 #introTexto {
   width: 70%;
   font-size: 18px;
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 /* 🔥 START */
