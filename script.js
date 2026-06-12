@@ -169,7 +169,7 @@ function escolher(opcao) {
 
   ambiente = Math.max(0, Math.min(100, ambiente));
   producao = Math.max(0, Math.min(100, producao));
-  comunidade = Math.max(0, Math.min(100, comunidade));
+  comunidade = Math.max(0, Math.min(100), comunidade);
 
   fase++;
   atualizarStatus();
@@ -181,7 +181,7 @@ function escolher(opcao) {
   }
 }
 
-/* 🌪️ CRISE AMBIENTAL */
+/* 🌪️ CRISE */
 function calcularCrise() {
   if (ambiente < 30) return "🔥 CRISE AMBIENTAL";
   if (ambiente < 50) return "⚠️ ALERTA AMBIENTAL";
@@ -189,7 +189,7 @@ function calcularCrise() {
   return "🌱 ESTABILIDADE";
 }
 
-/* 🏁 FINAL */
+/* 🏁 FINAL NARRATIVO */
 function final() {
 
   document.getElementById("botoes").style.display = "none";
@@ -200,26 +200,68 @@ function final() {
   let media = Math.round((ambiente + producao + comunidade) / 3);
   let crise = calcularCrise();
 
-  let txt = "";
+  let titulo = "";
+  let historia = "";
 
   if (ambiente >= 80 && producao >= 80 && comunidade >= 80) {
-    txt = "FINAL VERDADEIRO 🌍\nEquilíbrio perfeito em Vale Verde.";
+    titulo = "🌍 FINAL: VALE VERDE RENASCEU";
+    historia =
+      "Vale Verde se tornou um modelo mundial de sustentabilidade.\n\n" +
+      "Os recursos naturais foram preservados e a produção agrícola convive em harmonia com o meio ambiente.\n\n" +
+      "A comunidade vive em equilíbrio e serve de exemplo para outras regiões.";
   }
+
   else if (ambiente > producao + 25) {
-    txt = "FINAL PRESERVAÇÃO 🌳\nNatureza protegida, produção limitada.";
+    titulo = "🌳 FINAL: A NATUREZA DOMINOU";
+    historia =
+      "A preservação foi prioridade absoluta.\n\n" +
+      "As florestas cresceram e os ecossistemas se recuperaram, mas a produção agrícola caiu.\n\n" +
+      "A comunidade passou a depender mais da natureza do que da agricultura intensiva.";
   }
+
   else if (producao > ambiente + 25) {
-    txt = "FINAL PRODUÇÃO 🚜\nAlta produção com impacto ambiental.";
+    titulo = "🚜 FINAL: O CRESCIMENTO SEM FREIO";
+    historia =
+      "A produção agrícola cresceu rapidamente e gerou riqueza.\n\n" +
+      "Porém, o meio ambiente sofreu grandes impactos e os recursos naturais ficaram ameaçados.\n\n" +
+      "O futuro da região se tornou incerto.";
+  }
+
+  else {
+    titulo = "⚖️ FINAL: EQUILÍBRIO INSTÁVEL";
+    historia =
+      "Vale Verde manteve um equilíbrio parcial entre produção e natureza.\n\n" +
+      "Nenhum colapso ocorreu, mas também não houve progresso sustentável significativo.\n\n" +
+      "O futuro ainda depende de novas decisões.";
+  }
+
+  let criseTexto = "";
+
+  if (crise === "🔥 CRISE AMBIENTAL") {
+    criseTexto = "\n\n🔥 Situação crítica: o meio ambiente está em colapso.";
+  }
+  else if (crise === "⚠️ ALERTA AMBIENTAL") {
+    criseTexto = "\n\n⚠️ Alerta: o ecossistema está sob forte pressão.";
+  }
+  else if (crise === "⚠️ PRESSÃO ECOLÓGICA") {
+    criseTexto = "\n\n⚠️ Pressão ecológica causada pela alta produção.";
   }
   else {
-    txt = "FINAL NEUTRO ⚖️\nEquilíbrio instável alcançado.";
+    criseTexto = "\n\n🌱 Sistema ainda está estável.";
   }
 
-  txt += "\n\n📊 Média geral: " + media + "%";
-  txt += "\n🌪️ Estado do mundo: " + crise;
+  let relatorio =
+    "\n\n📊 RELATÓRIO FINAL" +
+    "\n🌱 Ambiente: " + ambiente +
+    "\n🚜 Produção: " + producao +
+    "\n🏘️ Comunidade: " + comunidade +
+    "\n📈 Média: " + media +
+    "\n🌪️ Estado: " + crise;
+
+  let textoFinal = titulo + "\n\n" + historia + criseTexto + relatorio;
 
   document.getElementById("fim").style.display = "block";
-  document.getElementById("textoFinal").innerText = txt;
+  document.getElementById("textoFinal").innerText = textoFinal;
 }
 
 /* 🔁 REINICIAR */
