@@ -52,18 +52,21 @@ function mostrarIntroTexto(i = 0) {
     document.getElementById("introTexto").innerText += texto.charAt(i);
     setTimeout(() => mostrarIntroTexto(i + 1), 40);
   } else {
+    // 🔥 FORÇA QUEBRA DE LINHA ENTRE FRASES
+    document.getElementById("introTexto").innerText += "\n\n";
+
     setTimeout(() => {
       introIndex++;
 
       if (introIndex < introTextos.length) {
-        setTimeout(() => mostrarIntroTexto(0), 600);
+        mostrarIntroTexto(0);
       } else {
         setTimeout(() => {
           document.getElementById("intro").style.display = "none";
           document.getElementById("start").style.display = "block";
         }, 800);
       }
-    }, 1000);
+    }, 800);
   }
 }
 
