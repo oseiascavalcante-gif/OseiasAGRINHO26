@@ -1,4 +1,4 @@
-// Gerenciador de Estados do Jogo e dos 3 Chefes com 5 padrões de ataques cada
+// Gerenciador de Estados do Jogo e dos 3 Chefes
 const gameData = {
     currentBoss: 0,
     bosses: [
@@ -9,7 +9,9 @@ const gameData = {
             actSuccess: "* Você plantou mudas de cobertura! As raízes seguram a poeira. O corpo de Erosão parou de rachar!",
             lore: "LORE: Solo desprotegido perde nutrientes com o vento e a chuva. O plantio direto e curvas de nível seguram a vida na terra!",
             projClass: "proj-terra",
-            attacks: ["chuva_detritos", "desmoronamento", "poeira_cega", "raios_terra", "terremoto_caotico"]
+            attacks: ["chuva_detritos", "desmoronamento", "poeira_cega", "raios_terra", "terremoto_caotico"],
+            hp: 100,
+            maxHp: 100
         },
         {
             name: "PRAGA",
@@ -18,16 +20,20 @@ const gameData = {
             actSuccess: "* Você introduziu o Controle Biológico! As joaninhas equilibram o ambiente. Praga parece confusa e calma.",
             lore: "LORE: O uso excessivo de veneno mata os insetos bons. O Manejo Integrado de Pragas (MIP) usa a própria natureza para proteger a lavoura!",
             projClass: "proj-inseto",
-            attacks: ["voo_diagonal", "enxame_frenetico", "ataque_perseguidor", "onda_lagartas", "espiral_nuvem"]
+            attacks: ["voo_diagonal", "enxame_frenetico", "ataque_perseguidor", "onda_lagartas", "espiral_nuvem"],
+            hp: 120,
+            maxHp: 120
         },
         {
             name: "DESPERDIÇADOR",
             spriteClass: "sprite-desperdiçador",
             intro: "* Uma nuvem negra de fumaça de tratores desregulados surge. DESPERDIÇADOR gasta recursos sem pensar.",
-            actSuccess: "* Você calibrou os tratores e usou irrigação de precisão. A nuvem negra se dissipa em água limpa!",
+            actSuccess: "* Você calibrotou os tratores e usou irrigação de precisão. A nuvem negra se dissipa em água limpa!",
             lore: "LORE: Tecnologia no campo evita desperdício de água e diesel. Produzir com consciência gera eficiência e protege a atmosfera!",
             projClass: "proj-acido",
-            attacks: ["chuva_acida", "fumaca_expansiva", "vazamento_oleo", "raio_carbono", "tempestade_total"]
+            attacks: ["chuva_acida", "fumaca_expansiva", "vazamento_oleo", "raio_carbono", "tempestade_total"],
+            hp: 150,
+            maxHp: 150
         }
     ]
 };
@@ -44,14 +50,17 @@ let gameInterval;
 let activeAttackTimers = [];
 const keys = {};
 
+// Trava lógica para controle anti-bug de cliques simultâneos
+let podeClicar = true;
+
 // Elementos da DOM
 const player = document.getElementById('player');
 const arena = document.getElementById('battle-arena');
 const dialogueElement = document.getElementById('dialogue');
 const bossNameElement = document.getElementById('boss-name');
 const bossSpriteElement = document.getElementById('boss-sprite');
+const bossHpBar = document.getElementById('boss-hp-bar');
 
-// Movimentação Dinâmica (Setas do Teclado)
 window.addEventListener('keydown', (e) => keys[e.key] = true);
 window.addEventListener('keyup', (e) => keys[e.key] = false);
 
@@ -67,7 +76,6 @@ function updateMovement() {
     checkCollisions();
 }
 
-// Efeito Clássico de Texto Correndo Letra por Letra
 function typeWriter(text) {
     dialogueElement.innerText = "";
     let i = 0;
@@ -82,11 +90,9 @@ function typeWriter(text) {
     }, 25);
 }
 
-// Função base para criar projéteis na arena
-function createProjectile(startX, startY, speedX, speedY, extraClass = "") {
+function createProjectile(startX, startY, speedX, speedY) {
     const proj = document.createElement('div');
     proj.classList.add('projectile', currentBossState.projClass);
-    if(extraClass) proj.classList.add(extraClass);
     
     proj.style.left = startX + 'px';
     proj.style.top = startY + 'px';
@@ -110,11 +116,8 @@ function createProjectile(startX, startY, speedX, speedY, extraClass = "") {
     activeAttackTimers.push(timer);
 }
 
-// MÁQUINA DE ATAQUES: Executa o padrão sorteado do Chefe Atual
 function executePattern(patternName) {
     let count = 0;
-
-    // ---- EROSÃO ----
     if (patternName === "chuva_detritos") {
         const t = setInterval(() => { createProjectile(Math.random() * 230, 0, 0, 4); }, 300);
         activeAttackTimers.push(t);
@@ -131,10 +134,7 @@ function executePattern(patternName) {
         activeAttackTimers.push(t);
     } 
     else if (patternName === "raios_terra") {
-        const t = setInterval(() => {
-            createProjectile(0, 180, 4, -1);
-            createProjectile(230, 180, -4, -1);
-        }, 400);
+        const t = setInterval(() => { createProjectile(0, 180, 4, -1); createProjectile(230, 180, -4, -1); }, 400);
         activeAttackTimers.push(t);
     } 
     else if (patternName === "terremoto_caotico") {
@@ -144,16 +144,12 @@ function executePattern(patternName) {
         }, 800);
         activeAttackTimers.push(t);
     }
-    // ---- PRAGA ----
     else if (patternName === "voo_diagonal") {
         const t = setInterval(() => { createProjectile(Math.random() * 100, 0, 3, 3); }, 250);
         activeAttackTimers.push(t);
     } 
     else if (patternName === "enxame_frenetico") {
-        const t = setInterval(() => {
-            createProjectile(Math.random() * 230, 0, 0, 5);
-            createProjectile(Math.random() * 230, 190, 0, -5);
-        }, 400);
+        const t = setInterval(() => { createProjectile(Math.random() * 230, 0, 0, 5); createProjectile(Math.random() * 230, 190, 0, -5); }, 400);
         activeAttackTimers.push(t);
     } 
     else if (patternName === "ataque_perseguidor") {
@@ -165,26 +161,16 @@ function executePattern(patternName) {
         activeAttackTimers.push(t);
     } 
     else if (patternName === "onda_lagartas") {
-        const t = setInterval(() => {
-            createProjectile(0, 170, 5, 0);
-            createProjectile(240, 140, -5, 0);
-        }, 500);
+        const t = setInterval(() => { createProjectile(0, 170, 5, 0); createProjectile(240, 140, -5, 0); }, 500);
         activeAttackTimers.push(t);
     } 
     else if (patternName === "espiral_nuvem") {
         let angle = 0;
-        const t = setInterval(() => {
-            angle += 0.5;
-            createProjectile(117 + Math.sin(angle)*60, 0, 0, 4);
-        }, 150);
+        const t = setInterval(() => { angle += 0.5; createProjectile(117 + Math.sin(angle)*60, 0, 0, 4); }, 150);
         activeAttackTimers.push(t);
     }
-    // ---- DESPERDIÇADOR ----
     else if (patternName === "chuva_acida") {
-        const t = setInterval(() => {
-            let drift = Math.sin(count++ * 0.5) * 2;
-            createProjectile(Math.random() * 230, 0, drift, 4.5);
-        }, 200);
+        const t = setInterval(() => { let drift = Math.sin(count++ * 0.5) * 2; createProjectile(Math.random() * 230, 0, drift, 4.5); }, 200);
         activeAttackTimers.push(t);
     } 
     else if (patternName === "fumaca_expansiva") {
@@ -192,10 +178,7 @@ function executePattern(patternName) {
         activeAttackTimers.push(t);
     } 
     else if (patternName === "vazamento_oleo") {
-        const t = setInterval(() => {
-            createProjectile(0, 50, 4, 0);
-            createProjectile(240, 120, -4, 0);
-        }, 600);
+        const t = setInterval(() => { createProjectile(0, 50, 4, 0); createProjectile(240, 120, -4, 0); }, 600);
         activeAttackTimers.push(t);
     } 
     else if (patternName === "raio_carbono") {
@@ -203,15 +186,11 @@ function executePattern(patternName) {
         activeAttackTimers.push(t);
     } 
     else if (patternName === "tempestade_total") {
-        const t = setInterval(() => {
-            createProjectile(Math.random() * 230, 0, 0, 6);
-            createProjectile(0, Math.random() * 180, 4, 0);
-        }, 300);
+        const t = setInterval(() => { createProjectile(Math.random() * 230, 0, 0, 6); createProjectile(0, Math.random() * 180, 4, 0); }, 300);
         activeAttackTimers.push(t);
     }
 }
 
-// Gerencia Colisões (Tomar Dano)
 function checkCollisions() {
     const projectiles = document.querySelectorAll('.projectile');
     projectiles.forEach((proj) => {
@@ -232,104 +211,108 @@ function takeDamage() {
         typeWriter("* Sua semente murchou... O Solo virou deserto permanente. FIM DE JOGO.");
         clearAllAttackTimers();
         clearInterval(gameInterval);
+        podeClicar = false;
     }
     document.getElementById('hp-bar-current').style.width = (hp / maxHp * 100) + '%';
     document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
 }
 
-// Limpa todos os projéteis e cronômetros ativos
 function clearAllAttackTimers() {
     activeAttackTimers.forEach(timer => clearInterval(timer));
     activeAttackTimers = [];
     document.querySelectorAll('.projectile').forEach(p => p.remove());
 }
 
-// Menu de Decisões do Jogador
+function alternarBotoes(status) {
+    podeClicar = status;
+    const botoes = document.querySelectorAll('.menu-btn');
+    botoes.forEach(btn => btn.disabled = !status);
+}
+
 function selectAction(action) {
-    if (hp <= 0) return;
+    if (!podeClicar || hp <= 0) return;
+    alternarBotoes(false); // Desativa botões para prevenir cliques repetidos e bugs de fila
 
     if (action === 'agir') {
         isBossPacified = true;
         typeWriter(currentBossState.actSuccess);
-        startBossTurn();
+        setTimeout(startBossTurn, 2500);
     } 
     else if (action === 'atacar') {
         isBossPacified = false;
-        typeWriter(`* Você atacou ${currentBossState.name} à força! O monstro ficou instável e contra-ataca furioso!`);
-        startBossTurn();
+        currentBossState.hp -= 30; 
+        if (currentBossState.hp < 0) currentBossState.hp = 0;
+        
+        bossHpBar.style.width = (currentBossState.hp / currentBossState.maxHp * 100) + '%';
+        
+        if (currentBossState.hp <= 0) {
+            typeWriter(`* Você derrotou ${currentBossState.name} pela força brutal! A terra estremece de forma instável.`);
+            setTimeout(nextBoss, 3000);
+        } else {
+            typeWriter(`* Você golpeou ${currentBossState.name}! O monstro ficou instável e contra-ataca furiosamente!`);
+            setTimeout(startBossTurn, 2500);
+        }
     } 
     else if (action === 'item') {
         hp = maxHp;
         document.getElementById('hp-bar-current').style.width = '100%';
-        // Atualiza a interface com a vida atualizada
         document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
+        
         typeWriter("* Você consumiu 'Adubo Orgânico'. Seu HP foi restaurado!");
+        setTimeout(startBossTurn, 2500);
     } 
     else if (action === 'poupar') {
         if (isBossPacified) {
-            // Exibe a Lore do Agrinho e confirma a vitória pacífica
-            typeWriter(currentBossState.lore + " [POUPADO COM SUCESSO!]");
+            typeWriter(currentBossState.lore + " [POUPADO COMPLEMENTE!]");
             clearAllAttackTimers();
-            
-            // Aguarda 6 segundos para o jogador ler a informação antes do próximo chefe
-            setTimeout(() => { 
-                nextBoss(); 
-            }, 6000);
+            setTimeout(nextBoss, 6000);
         } else {
-            // Mensagem caso o jogador tente poupar sem corrigir o manejo antes
             typeWriter(`* ${currentBossState.name} recusa seus termos. Use AGIR com práticas corretas primeiro!`);
+            setTimeout(() => { alternarBotoes(true); }, 2500);
         }
     }
 }
 
-/**
- * Sorteia e dispara um dos 5 ataques do chefe atual 
- * durante o turno de defesa (com duração de 5 segundos)
- */
 function startBossTurn() {
+    if (hp <= 0 || currentBossState.hp <= 0) return;
     clearAllAttackTimers();
     
     const attackList = currentBossState.attacks;
     const randomAttack = attackList[Math.floor(Math.random() * attackList.length)];
-    
     executePattern(randomAttack);
     
-    // Encerra o turno de ataque após 5 segundos
     setTimeout(() => {
         clearAllAttackTimers();
-        if (hp > 0 && !isBossPacified) {
+        if (hp > 0) {
             typeWriter("* O ataque cessou. O ambiente ainda precisa de ajustes de manejo!");
+            alternarBotoes(true); // Restaura o controle do menu apenas ao fim do turno
         }
     }, 5000);
 }
 
-/**
- * Transiciona o estado do jogo para o próximo chefe da fila
- * ou encerra a partida caso o jogador alcance o Final Pacifista
- */
 function nextBoss() {
     gameData.currentBoss++;
     isBossPacified = false;
 
-    // Se ainda houverem chefes disponíveis na lista
     if (gameData.currentBoss < gameData.bosses.length) {
         currentBossState = gameData.bosses[gameData.currentBoss];
-        
         bossNameElement.innerText = `* ${currentBossState.name}`;
         bossSpriteElement.className = currentBossState.spriteClass;
+        bossHpBar.style.width = '100%';
         
         typeWriter(currentBossState.intro);
+        setTimeout(() => { alternarBotoes(true); }, 2000);
     } else {
-        // Encerramento do jogo com vitória sustentável total
         bossNameElement.innerText = "* REVOLUÇÃO VERDE";
         bossSpriteElement.style.backgroundColor = "#00ff00";
         bossSpriteElement.style.borderRadius = "50%";
+        if (bossHpBar.parentElement) bossHpBar.parentElement.remove();
         
         typeWriter("🌟 FINAL PACIFISTA: Você aplicou todas as diretrizes do Agrinho! O solo prospera, os insetos polinizam em paz e o campo vive em equilíbrio sustentável tecnológico!");
         clearInterval(gameInterval);
     }
 }
 
-// Inicialização do Game Loop Principal
+// Inicialização
 typeWriter(currentBossState.intro);
 gameInterval = setInterval(updateMovement, 1000 / 60);
