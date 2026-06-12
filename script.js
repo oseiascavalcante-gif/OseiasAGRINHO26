@@ -42,7 +42,7 @@ function iniciarIntro() {
   mostrarIntroTexto();
 }
 
-/* 🔥 INTRO CORRIGIDA (SEM TEXTO COLADO) */
+/* ✨ INTRO TIPO RPG */
 function mostrarIntroTexto() {
   let texto = introTextos[introIndex];
   let el = document.getElementById("introTexto");
@@ -56,7 +56,7 @@ function mostrarIntroTexto() {
       i++;
       setTimeout(escrever, 40);
     } else {
-      el.innerHTML += "<br><br>"; // quebra real de linha
+      el.innerHTML += "<br><br>";
 
       introIndex++;
 
@@ -98,7 +98,6 @@ function atualizarStatus() {
 /* 🔤 TEXTO */
 function digitarTexto(texto, i = 0) {
   travado = true;
-
   document.getElementById("botoes").style.pointerEvents = "none";
 
   if (i < texto.length) {
