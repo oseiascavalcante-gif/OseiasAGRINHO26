@@ -54,6 +54,14 @@ body {
   line-height: 1.5;
 }
 
+/* ✅ CORREÇÃO DO TEXTO JUNTANDO */
+#dialogo p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: block;
+}
+
 /* 🎯 BOTÕES */
 #botoes {
   margin-top: 15px;
