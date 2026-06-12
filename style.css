@@ -5,7 +5,23 @@ body {
   font-family: monospace;
   text-align: center;
 }
+#intro {
+  display: none;
+  height: 100vh;
+  background: black;
+  color: white;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+#introTexto {
+  width: 70%;
+  font-size: 18px;
+  text-align: center;
+  line-height: 1.5;
+}
 /* START */
 #start {
   margin-top: 120px;
