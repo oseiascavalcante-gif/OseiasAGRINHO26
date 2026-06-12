@@ -1,26 +1,35 @@
 body {
   margin: 0;
-  background: black;
-  color: white;
+  background: #000;
+  color: #fff;
   font-family: monospace;
   text-align: center;
 }
 
+/* 🌫️ ANIMAÇÃO GLOBAL */
+#intro, #start, #game {
+  animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* 🎬 INTRO */
 #intro {
-  display: flex;
+  display: none;
   height: 100vh;
-  background: black;
   align-items: center;
   justify-content: center;
+  background: radial-gradient(circle, #111, #000);
 }
 
 #introTexto {
   width: 70%;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.8;
   white-space: pre-line;
-  text-align: center;
 }
 
 /* 🔥 START */
@@ -29,44 +38,37 @@ body {
 }
 
 #start h1 {
-  font-size: 48px;
-  letter-spacing: 4px;
+  font-size: 50px;
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px #0f0;
 }
 
 /* 🎮 JOGO */
 #game {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 /* 🌱 PERSONAGEM */
 #personagem {
-  font-size: 70px;
+  font-size: 80px;
   margin: 10px;
+  filter: drop-shadow(0 0 10px #0f0);
 }
 
 /* 💬 CAIXA */
 #dialogo {
-  border: 3px solid white;
-  width: 60%;
+  border: 3px solid #fff;
+  width: 65%;
   margin: 20px auto;
   padding: 20px;
   min-height: 120px;
   font-size: 18px;
-  line-height: 1.5;
-}
-
-/* 🔤 TEXTO LIMPO */
-#dialogo p {
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  display: block;
+  line-height: 1.6;
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 0 15px rgba(255,255,255,0.1);
 }
 
 /* 🎯 BOTÕES */
-#botoes {
-  margin-top: 15px;
-}
-
 button {
   padding: 10px 20px;
   margin: 10px;
