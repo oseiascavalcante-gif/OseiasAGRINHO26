@@ -4,8 +4,17 @@ let comunidade = 50;
 
 let fase = 0;
 let travado = false;
+let introIndex = 0;
 
 const personagens = ["🌱", "💧", "🌳", "🚜", "🏘️"];
+
+const introTextos = [
+  "Em uma região chamada Vale Verde...",
+  "A produção agrícola cresceu rapidamente...",
+  "Mas o equilíbrio com a natureza começou a ser afetado...",
+  "Agora, o futuro depende das suas escolhas...",
+  "AGROTALE"
+];
 
 const textos = [
   "Uma nascente está ameaçada por uma plantação.",
@@ -15,13 +24,50 @@ const textos = [
   "A comunidade precisa de decisões sobre o futuro."
 ];
 
+/* 🎬 INTRO */
+function iniciarIntro() {
+  document.getElementById("intro").style.display = "flex";
+  document.getElementById("introTexto").innerText = "";
+
+  mostrarIntroTexto();
+}
+
+function mostrarIntroTexto(i = 0) {
+  let texto = introTextos[introIndex];
+
+  if (i === 0) {
+    document.getElementById("introTexto").innerText = "";
+  }
+
+  if (i < texto.length) {
+    document.getElementById("introTexto").innerText += texto.charAt(i);
+    setTimeout(() => mostrarIntroTexto(i + 1), 40);
+  } else {
+    setTimeout(() => {
+      introIndex++;
+
+      if (introIndex < introTextos.length) {
+        mostrarIntroTexto(0);
+      } else {
+        setTimeout(() => {
+          document.getElementById("intro").style.display = "none";
+          document.getElementById("start").style.display = "block";
+        }, 1000);
+      }
+    }, 1000);
+  }
+}
+
+/* ▶️ INÍCIO DO JOGO */
 function iniciarJogo() {
   document.getElementById("start").style.display = "none";
   document.getElementById("game").style.display = "block";
+
   mostrarTexto(textos[0]);
   atualizarStatus();
 }
 
+/* 📊 STATUS */
 function atualizarStatus() {
   document.getElementById("ambiente").innerText = ambiente;
   document.getElementById("producao").innerText = producao;
@@ -78,7 +124,6 @@ function escolher(opcao) {
   }
 
   fase++;
-
   atualizarStatus();
 
   if (fase < textos.length) {
@@ -122,3 +167,8 @@ function final() {
 function reiniciar() {
   location.reload();
 }
+
+/* 🚀 START AUTOMÁTICO */
+window.onload = function () {
+  iniciarIntro();
+};
