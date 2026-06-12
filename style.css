@@ -18,8 +18,6 @@ body {
 /* TRAILER */
 #trailer {
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background: black;
@@ -33,26 +31,6 @@ body {
   width: 70%;
   white-space: pre-line;
   line-height: 1.8;
-}
-
-/* CUTSCENE */
-#cutscene {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-#cutscene-texto {
-  width: 70%;
-  white-space: pre-line;
-  line-height: 1.6;
 }
 
 /* MENU */
@@ -72,9 +50,9 @@ body {
 }
 
 @keyframes floatMenu {
-  0% { transform: translateY(0px); }
+  0% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
+  100% { transform: translateY(0); }
 }
 
 .titulo {
@@ -87,16 +65,12 @@ body {
   to { text-shadow: 0 0 20px #00ff88; }
 }
 
-.subtitulo {
-  font-size: 14px;
-  opacity: 0.8;
-}
+.subtitulo { opacity: 0.8; }
 
 .btn-start {
-  margin-top: 15px;
   padding: 12px 25px;
-  border: 2px solid white;
   background: black;
+  border: 2px solid white;
   cursor: pointer;
 }
 
@@ -123,7 +97,6 @@ body {
   width: 70%;
   padding: 15px;
   min-height: 100px;
-  margin: 10px;
 }
 
 button {
@@ -132,7 +105,6 @@ button {
   background: black;
   color: white;
   border: 2px solid white;
-  cursor: pointer;
 }
 
 button:hover {
@@ -168,17 +140,18 @@ button:hover {
 #bar-producao { background: #f39c12; }
 #bar-comunidade { background: #3498db; }
 
-/* FINAL */
-#dashboard {
+/* EPÍLOGO */
+#epilogo {
   display: none;
-  width: 80%;
-  margin: auto;
-  padding: 20px;
-  border: 2px solid white;
-  background: rgba(0,0,0,0.6);
+  min-height: 100vh;
+  background: black;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.metricas {
-  text-align: left;
-  margin-top: 10px;
+#epilogo-texto {
+  width: 70%;
+  white-space: pre-line;
+  line-height: 1.8;
 }
