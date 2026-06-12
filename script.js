@@ -4,6 +4,14 @@ let comunidade = 50;
 
 let fase = 0;
 
+const personagens = [
+  "🌱",
+  "💧",
+  "🌳",
+  "🚜",
+  "🏘️"
+];
+
 const textos = [
   "Uma nascente está ameaçada por uma nova plantação...",
   "O solo começa a perder nutrientes...",
@@ -35,6 +43,9 @@ function digitarTexto(texto, i = 0) {
 function mostrarTexto(txt) {
   document.getElementById("texto").innerHTML = "";
   digitarTexto(txt);
+  function atualizarPersonagem() {
+  document.getElementById("personagem").innerText = personagens[fase] || "🌾";
+  
 }
 
 function escolher(opcao) {
@@ -66,7 +77,7 @@ function escolher(opcao) {
 
   fase++;
   atualizarStatus();
-
+  atualizarPersonagem();
   if (fase < textos.length) {
     mostrarTexto(textos[fase]);
   } else {
@@ -80,17 +91,29 @@ function final() {
 
   let txt = "";
 
-  if (ambiente >= 70 && producao >= 70 && comunidade >= 70) {
-    txt = "FINAL DOURADO: Vale Verde virou exemplo de equilíbrio sustentável.";
+  // ⭐ FINAL SECRETO (EQUILÍBRIO PERFEITO REAL)
+  if (ambiente >= 80 && producao >= 80 && comunidade >= 80) {
+    txt = "FINAL VERDADEIRO: Você encontrou o equilíbrio perfeito entre natureza, produção e comunidade. Vale Verde virou um exemplo mundial de sustentabilidade.";
   }
-  else if (producao > ambiente + 20) {
-    txt = "FINAL PRODUÇÃO: Crescimento alto, mas com degradação ambiental.";
+
+  // 🌱 FINAL SUSTENTÁVEL
+  else if (ambiente >= 70 && producao >= 70) {
+    txt = "FINAL DOURADO: Desenvolvimento sustentável alcançado com sucesso.";
   }
-  else if (ambiente > producao) {
-    txt = "FINAL PRESERVAÇÃO: Natureza protegida, mas produção limitada.";
+
+  // 🚜 FINAL PRODUÇÃO
+  else if (producao > ambiente + 25) {
+    txt = "FINAL PRODUÇÃO: Alta produtividade, mas o meio ambiente entrou em colapso.";
   }
+
+  // 🌳 FINAL PRESERVAÇÃO
+  else if (ambiente > producao + 25) {
+    txt = "FINAL PRESERVAÇÃO: A natureza foi protegida, mas a produção não sustentou a comunidade.";
+  }
+
+  // ⚖️ FINAL NEUTRO
   else {
-    txt = "FINAL EQUILÍBRIO: Um meio-termo foi alcançado.";
+    txt = "FINAL NEUTRO: Um equilíbrio instável foi alcançado.";
   }
 
   mostrarTexto(txt);
