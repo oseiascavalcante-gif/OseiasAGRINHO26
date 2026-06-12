@@ -6,6 +6,15 @@ body {
   text-align: center;
 }
 
+/* 🔥 CORREÇÃO DO PROBLEMA DE TEXTO JUNTO */
+#texto,
+#cutscene-texto,
+#dash-historia,
+#dash-titulo {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
 /* CUTSCENE */
 #cutscene {
   position: fixed;
@@ -27,8 +36,6 @@ body {
 
 #cutscene-texto {
   width: 70%;
-  white-space: pre-line;
-  line-height: 1.8;
 }
 
 /* INTRO */
@@ -42,7 +49,6 @@ body {
 #introTexto {
   width: 70%;
   font-size: 20px;
-  white-space: pre-line;
 }
 
 /* START */
