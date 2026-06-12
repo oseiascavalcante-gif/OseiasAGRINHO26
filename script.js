@@ -1,207 +1,315 @@
-// Banco de Dados Expandido com 5 Inimigos do Ecossistema Paranaense
-const enemyDatabase = [
-    {
-        name: "Gárgula da Erosão",
-        baseSprite: "🏜️",
-        happySprite: "🌱",
-        hp: 100,
-        actText: "* Você decide fazer o terraceamento mecânico e plantar árvores nativas nas encostas para segurar o solo.",
-        spawnText: "* A Gárgula da Erosão impede o avanço! O solo está rachado e desprotegido.",
-        loreTitle: "Crônica I: O Escudo da Terra",
-        loreText: "Registros históricos mostram que o Paraná perdia toneladas de terra fértil antes da popularização do plantio direto e das curvas de nível. Ao conter a erosão, descobrimos que manter o solo coberto com palhada reduz o impacto da chuva em até 90%. O Agro forte nasce protegendo a base de tudo.",
-        // Padrões de ataque dinâmicos baseados no HP
-        attacks: {
-            healthy: "* O inimigo faz rochas desabarem das encostas! Desvie!",
-            critical: "* RANGER DE DIENTES! A poeira da tempestade de terra bloqueia sua visão! O ataque ficou mais rápido!"
+// Gerenciador de Estados do Jogo e dos 3 Chefes com 5 padrões de ataques cada
+const gameData = {
+    currentBoss: 0,
+    bosses: [
+        {
+            name: "EROSÃO",
+            spriteClass: "sprite-erosao",
+            intro: "* Erosão bloqueia o seu caminho! O solo rachado chora poeira e clama por socorro.",
+            actSuccess: "* Você plantou mudas de cobertura! As raízes seguram a poeira. O corpo de Erosão parou de rachar!",
+            lore: "LORE: Solo desprotegido perde nutrientes com o vento e a chuva. O plantio direto e curvas de nível seguram a vida na terra!",
+            projClass: "proj-terra",
+            attacks: ["chuva_detritos", "desmoronamento", "poeira_cega", "raios_terra", "terremoto_caotico"]
+        },
+        {
+            name: "PRAGA",
+            spriteClass: "sprite-praga",
+            intro: "* Um enxame furioso de insetos bloqueia o sol! PRAGA quer devorar tudo por vingança.",
+            actSuccess: "* Você introduziu o Controle Biológico! As joaninhas equilibram o ambiente. Praga parece confusa e calma.",
+            lore: "LORE: O uso excessivo de veneno mata os insetos bons. O Manejo Integrado de Pragas (MIP) usa a própria natureza para proteger a lavoura!",
+            projClass: "proj-inseto",
+            attacks: ["voo_diagonal", "enxame_frenetico", "ataque_perseguidor", "onda_lagartas", "espiral_nuvem"]
+        },
+        {
+            name: "DESPERDIÇADOR",
+            spriteClass: "sprite-desperdiçador",
+            intro: "* Uma nuvem negra de fumaça de tratores desregulados surge. DESPERDIÇADOR gasta recursos sem pensar.",
+            actSuccess: "* Você calibrou os tratores e usou irrigação de precisão. A nuvem negra se dissipa em água limpa!",
+            lore: "LORE: Tecnologia no campo evita desperdício de água e diesel. Produzir com consciência gera eficiência e protege a atmosfera!",
+            projClass: "proj-acido",
+            attacks: ["chuva_acida", "fumaca_expansiva", "vazamento_oleo", "raio_carbono", "tempestade_total"]
         }
-    },
-    {
-        name: "Espírito da Água Turva",
-        baseSprite: "🌊",
-        happySprite: "💧",
-        hp: 120,
-        actText: "* Você inicia o isolamento das fontes e o plantio de mata ciliar nas margens dos rios da propriedade.",
-        spawnText: "* O Espírito da Água Turva surge chorando resíduos de poluição e lodo.",
-        loreTitle: "Crônica II: As Veias Hidrográficas do Estado",
-        loreText: "A água que abastece as cidades nasce no interior de pequenas propriedades rurais. Quando o produtor protege as matas ciliares, ele impede que defensivos ou terra caiam no leito dos rios. Preservar as bacias hidrográficas do Paraná garante energia barata e alimentos puros.",
-        attacks: {
-            healthy: "* Uma onda de água barrenta e contaminada avança em sua direção!",
-            critical: "* REDEMOINHO! O rio corre furioso com enxurradas ácidas! O perigo dobrou!"
-        }
-    },
-    {
-        name: "Titã do Desperdício",
-        baseSprite: "🗑️",
-        happySprite: "📦",
-        hp: 150,
-        actText: "* Você implementa sensores automáticos de irrigação por gotejamento e compostagem orgânica.",
-        spawnText: "* O Titã do Desperdício espalha fumaça de queima de recursos preciosos.",
-        loreTitle: "Crônica III: O Amanhã Digital",
-        loreText: "A tecnologia no campo não serve apenas para produzir mais, mas para erradicar o desperdício. O equilíbrio moderno usa tratores guiados por GPS e drones agrícolas para aplicar insumos na quantidade milimétrica necessária. O futuro sustentável une o conhecimento tradicional à inteligência de dados.",
-        attacks: {
-            healthy: "* Uma chuva de fumaça tóxica de queimadas polui a arena de batalha!",
-            critical: "* INCÊNDIO FLORESTAL! Chamas descontroladas reduzem o seu tempo de reação!"
-        }
-    },
-    {
-        name: "Nuvem de Pragas Resistentes",
-        baseSprite: "🪰",
-        happySprite: "🐝",
-        hp: 130,
-        actText: "* Você introduz o Manejo Integrado de Pragas (MIP) usando vespas e predadores biológicos naturais.",
-        spawnText: "* Uma nuvem ensurdecedora de insetos corrompidos ameaça devorar toda a plantação.",
-        loreTitle: "Crônica IV: O Equilíbrio da Fauna Agrícola",
-        loreText: "O uso indiscriminado de defensivos químicos elimina os predadores naturais e cria superpragas resistentes. O MIP (Manejo Integrado de Pragas) monitora a lavoura e só intervém no momento correto, preferindo o controle biológico. Isso protege os polinizadores, como as abelhas, cruciais para a biodiversidade do Paraná.",
-        attacks: {
-            healthy: "* A nuvem avança em um ataque rasante desordenado!",
-            critical: "* ENXAME FURIOSO! Insetos atacam em formação de pinça por múltiplos lados ao mesmo tempo!"
-        }
-    },
-    {
-        name: "Guardião da Mata Devastada",
-        baseSprite: "🪓",
-        happySprite: "🌳",
-        hp: 180,
-        actText: "* Você cadastra a fazenda no CAR (Cadastro Ambiental Rural) e isola a área de Reserva Legal.",
-        spawnText: "* O chefe final surge! Uma árvore centenária corrompida por machados de desmatamento ilegal.",
-        loreTitle: "Crônica V: O Pacto Verde Paranaense",
-        loreText: "Produção e preservação caminham juntas. O Código Florestal exige que propriedades tenham áreas de Reserva Legal e Áreas de Preservação Permanente (APP) intocadas. Fazendas sustentáveis que mantém florestas em pé ajudam a regular o regime de chuvas, protegendo a própria colheita contra secas extremas.",
-        attacks: {
-            healthy: "* Raízes secas brotam violentamente do chão tentando prender seus movimentos!",
-            critical: "* DESABAMENTO DA COPA! Galhos pesados e troncos caem em sequência rítmica devastadora!"
-        }
-    }
-];
+    ]
+};
 
-let currentEnemyIndex = 0;
-let currentEnemy = null;
-let enemyHP = 100;
-let enemyMercy = 0;
+// Variáveis de Controle de Jogo
+let hp = 20;
+let maxHp = 20;
+let playerX = 117;
+let playerY = 92;
+const playerSpeed = 3.5;
+let currentBossState = gameData.bosses[gameData.currentBoss];
+let isBossPacified = false;
+let gameInterval;
+let activeAttackTimers = [];
+const keys = {};
 
-const dbBox = document.getElementById("dialogue-box");
-const hpFill = document.getElementById("enemy-hp-fill");
-const mercyFill = document.getElementById("enemy-mercy-fill");
-const spareBtn = document.getElementById("spare-btn");
-const spriteEl = document.getElementById("enemy-sprite");
-const nameEl = document.getElementById("enemy-name");
+// Elementos da DOM
+const player = document.getElementById('player');
+const arena = document.getElementById('battle-arena');
+const dialogueElement = document.getElementById('dialogue');
+const bossNameElement = document.getElementById('boss-name');
+const bossSpriteElement = document.getElementById('boss-sprite');
 
-function loadEnemy() {
-    if (currentEnemyIndex >= enemyDatabase.length) {
-        dbBox.innerHTML = "* PARABÉNS! Você limpou toda a corrupção da região e garantiu o Futuro Sustentável do Agro! O Selo Ouro do Agrinho foi conquistado com sucesso e honra!";
-        document.querySelectorAll(".menu-btn").forEach(b => b.disabled = true);
-        nameEl.innerText = "Vitória Absoluta!";
-        spriteEl.innerHTML = "🏆";
-        return;
-    }
+// Movimentação Dinâmica (Setas do Teclado)
+window.addEventListener('keydown', (e) => keys[e.key] = true);
+window.addEventListener('keyup', (e) => keys[e.key] = false);
 
-    currentEnemy = enemyDatabase[currentEnemyIndex];
-    enemyHP = currentEnemy.hp;
-    enemyMercy = 0;
+function updateMovement() {
+    if (keys['ArrowUp'] && playerY > 0) playerY -= playerSpeed;
+    if (keys['ArrowDown'] && playerY < 184) playerY += playerSpeed;
+    if (keys['ArrowLeft'] && playerX > 0) playerX -= playerSpeed;
+    if (keys['ArrowRight'] && playerX < 234) playerX += playerSpeed;
 
-    nameEl.innerText = currentEnemy.name;
-    spriteEl.innerHTML = currentEnemy.baseSprite;
-    dbBox.innerHTML = currentEnemy.spawnText;
-
-    updateBars();
-}
-
-function updateBars() {
-    const hpPercent = (enemyHP / currentEnemy.hp) * 100;
-    hpFill.style.width = Math.max(0, hpPercent) + "%";
-    mercyFill.style.width = enemyMercy + "%";
-
-    // Mudança dinâmica de Expressão Baseada no Progresso do ACT / MERCY
-    if (enemyMercy >= 50 && enemyHP > 0) {
-        spriteEl.innerHTML = currentEnemy.happySprite; // Muda o emoji indicando cura/alívio
-        spriteEl.style.filter = "drop-shadow(0 0 10px #e6ff00)";
-    } else if (enemyHP <= (currentEnemy.hp * 0.4) && enemyHP > 0) {
-        spriteEl.innerHTML = "💢"; // Expressão de fúria se a vida cair abaixo de 40%
-        spriteEl.style.filter = "drop-shadow(0 0 10px #ff0055)";
-    } else if (enemyHP > 0) {
-        spriteEl.innerHTML = currentEnemy.baseSprite;
-        spriteEl.style.filter = "none";
-    }
-
-    // Gerencia o gatilho de liberação do botão SPARE
-    if (enemyMercy >= 100) {
-        spareBtn.disabled = false;
-        spareBtn.style.color = "#e6ff00";
-        spareBtn.style.borderColor = "#e6ff00";
-    } else {
-        spareBtn.disabled = true;
-        spareBtn.style.color = "#333";
-        spareBtn.style.borderColor = "#222";
-    }
-}
-
-// Retorna o texto do padrão de ataque dependendo do HP atual do Boss
-function getEnemyAttackText() {
-    const criticalThreshold = currentEnemy.hp * 0.4; // 40% de vida ou menos
-    if (enemyHP <= criticalThreshold) {
-        return `<br><span style='color: #ff0055; font-weight: bold;'>${currentEnemy.attacks.critical}</span>`;
-    }
-    return `<br><span style='color: #ff9800;'>${currentEnemy.attacks.healthy}</span>`;
-}
-
-// Comando FIGHT
-function handleAttack() {
-    spriteEl.style.transform = "scale(0.7) rotate(-5deg)";
-    setTimeout(() => spriteEl.style.transform = "scale(1) rotate(0deg)", 200);
-
-    const damage = 35;
-    enemyHP -= damage;
+    player.style.left = playerX + 'px';
+    player.style.top = playerY + 'px';
     
-    if (enemyHP <= 0) {
-        dbBox.innerHTML = `* Você desferiu um golpe crítico! Causou ${damage} de dano mecânico direto. A corrupção foi dissipada à força!`;
-        setTimeout(() => triggerLoreReveal("defeat"), 1000);
-    } else {
-        dbBox.innerHTML = `* Você atacou a criatura! Causou ${damage} de dano. ${getEnemyAttackText()}`;
-    }
+    checkCollisions();
+}
+
+// Efeito Clássico de Texto Correndo Letra por Letra
+function typeWriter(text) {
+    dialogueElement.innerText = "";
+    let i = 0;
+    clearInterval(window.typingTimer);
+    window.typingTimer = setInterval(() => {
+        if (i < text.length) {
+            dialogueElement.innerText += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(window.typingTimer);
+        }
+    }, 25);
+}
+
+// Função base para criar projéteis na arena
+function createProjectile(startX, startY, speedX, speedY, extraClass = "") {
+    const proj = document.createElement('div');
+    proj.classList.add('projectile', currentBossState.projClass);
+    if(extraClass) proj.classList.add(extraClass);
     
-    updateBars();
+    proj.style.left = startX + 'px';
+    proj.style.top = startY + 'px';
+    arena.appendChild(proj);
+
+    let curX = startX;
+    let curY = startY;
+
+    const timer = setInterval(() => {
+        curX += speedX;
+        curY += speedY;
+        proj.style.left = curX + 'px';
+        proj.style.top = curY + 'px';
+
+        if (curY > 200 || curY < -20 || curX > 250 || curX < -20) {
+            clearInterval(timer);
+            proj.remove();
+        }
+    }, 20);
+
+    activeAttackTimers.push(timer);
 }
 
-// Comando ACT (Muda expressão e mostra a reação do inimigo)
-function handleAct() {
-    spriteEl.style.transform = "translateY(-15px) scale(1.1)";
-    setTimeout(() => spriteEl.style.transform = "translateY(0) scale(1)", 250);
+// MÁQUINA DE ATAQUES: Executa o padrão sorteado do Chefe Atual
+function executePattern(patternName) {
+    let count = 0;
 
-    enemyMercy += 50; 
-    
-    if (enemyMercy >= 100) {
-        dbBox.innerHTML = `${currentEnemy.actText}<br><span style='color: #e6ff00; font-weight: bold;'>* O coração da criatura se encheu de esperança sustentável! Ela está pronta para ser poupada!</span>`;
-    } else {
-        dbBox.innerHTML = `${currentEnemy.actText} ${getEnemyAttackText()}`;
+    // ---- EROSÃO ----
+    if (patternName === "chuva_detritos") {
+        const t = setInterval(() => { createProjectile(Math.random() * 230, 0, 0, 4); }, 300);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "desmoronamento") {
+        const t = setInterval(() => {
+            createProjectile(0, Math.random() * 180, 3, 0);
+            createProjectile(240, Math.random() * 180, -3, 0);
+        }, 500);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "poeira_cega") {
+        const t = setInterval(() => { createProjectile(Math.random() * 230, 0, (Math.random() * 2 - 1), 2); }, 600);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "raios_terra") {
+        const t = setInterval(() => {
+            createProjectile(0, 180, 4, -1);
+            createProjectile(230, 180, -4, -1);
+        }, 400);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "terremoto_caotico") {
+        const t = setInterval(() => {
+            createProjectile(117, 92, 3, 0); createProjectile(117, 92, -3, 0);
+            createProjectile(117, 92, 0, 3); createProjectile(117, 92, 0, -3);
+        }, 800);
+        activeAttackTimers.push(t);
     }
-
-    updateBars();
+    // ---- PRAGA ----
+    else if (patternName === "voo_diagonal") {
+        const t = setInterval(() => { createProjectile(Math.random() * 100, 0, 3, 3); }, 250);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "enxame_frenetico") {
+        const t = setInterval(() => {
+            createProjectile(Math.random() * 230, 0, 0, 5);
+            createProjectile(Math.random() * 230, 190, 0, -5);
+        }, 400);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "ataque_perseguidor") {
+        const t = setInterval(() => {
+            let dx = playerX - 117; let dy = playerY - 0;
+            let angle = Math.atan2(dy, dx);
+            createProjectile(117, 0, Math.cos(angle) * 4, Math.sin(angle) * 4);
+        }, 600);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "onda_lagartas") {
+        const t = setInterval(() => {
+            createProjectile(0, 170, 5, 0);
+            createProjectile(240, 140, -5, 0);
+        }, 500);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "espiral_nuvem") {
+        let angle = 0;
+        const t = setInterval(() => {
+            angle += 0.5;
+            createProjectile(117 + Math.sin(angle)*60, 0, 0, 4);
+        }, 150);
+        activeAttackTimers.push(t);
+    }
+    // ---- DESPERDIÇADOR ----
+    else if (patternName === "chuva_acida") {
+        const t = setInterval(() => {
+            let drift = Math.sin(count++ * 0.5) * 2;
+            createProjectile(Math.random() * 230, 0, drift, 4.5);
+        }, 200);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "fumaca_expansiva") {
+        const t = setInterval(() => { createProjectile(Math.random() * 200, Math.random() * 160, 0, 0); }, 400);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "vazamento_oleo") {
+        const t = setInterval(() => {
+            createProjectile(0, 50, 4, 0);
+            createProjectile(240, 120, -4, 0);
+        }, 600);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "raio_carbono") {
+        const t = setInterval(() => { createProjectile(0, playerY, 6, 0); }, 800);
+        activeAttackTimers.push(t);
+    } 
+    else if (patternName === "tempestade_total") {
+        const t = setInterval(() => {
+            createProjectile(Math.random() * 230, 0, 0, 6);
+            createProjectile(0, Math.random() * 180, 4, 0);
+        }, 300);
+        activeAttackTimers.push(t);
+    }
 }
 
-// Comando SPARE
-function handleSpare() {
-    spriteEl.style.transform = "scale(0)";
-    dbBox.innerHTML = `* Você estendeu a mão e poupou ${currentEnemy.name}! Os fragmentos da natureza voltaram ao perfeito equilíbrio.`;
-    setTimeout(() => triggerLoreReveal("spare"), 1000);
+// Gerencia Colisões (Tomar Dano)
+function checkCollisions() {
+    const projectiles = document.querySelectorAll('.projectile');
+    projectiles.forEach((proj) => {
+        const pRect = player.getBoundingClientRect();
+        const bRect = proj.getBoundingClientRect();
+
+        if (!(pRect.right < bRect.left || pRect.left > bRect.right || pRect.bottom < bRect.top || pRect.top > bRect.bottom)) {
+            proj.remove();
+            takeDamage();
+        }
+    });
 }
 
-function triggerLoreReveal(method) {
-    const overlay = document.getElementById("lore-overlay");
-    const titleEl = document.getElementById("lore-title");
-    const textEl = document.getElementById("lore-text");
-
-    let prefix = method === "spare" ? "✨ Natureza Pacificada! " : "⚔️ Força Contida! ";
-    titleEl.innerText = prefix + currentEnemy.loreTitle;
-    textEl.innerText = currentEnemy.loreText;
-
-    overlay.style.display = "flex";
+function takeDamage() {
+    hp -= 4;
+    if (hp <= 0) {
+        hp = 0;
+        typeWriter("* Sua semente murchou... O Solo virou deserto permanente. FIM DE JOGO.");
+        clearAllAttackTimers();
+        clearInterval(gameInterval);
+    }
+    document.getElementById('hp-bar-current').style.width = (hp / maxHp * 100) + '%';
+    document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
 }
 
-function closeLore() {
-    document.getElementById("lore-overlay").style.display = "none";
-    spriteEl.style.transform = "scale(1)"; // Reseta escala para o próximo boss
-    currentEnemyIndex++; 
-    loadEnemy();
+// Limpa todos os projéteis e cronômetros ativos
+function clearAllAttackTimers() {
+    activeAttackTimers.forEach(timer => clearInterval(timer));
+    activeAttackTimers = [];
+    document.querySelectorAll('.projectile').forEach(p => p.remove());
 }
 
-// Execução inicial
-loadEnemy();
+// Menu de Decisões do Jogador
+function selectAction(action) {
+    if (hp <= 0) return;
+
+    if (action === 'agir') {
+        isBossPacified = true;
+        typeWriter(currentBossState.actSuccess);
+        startBossTurn();
+    } 
+    else if (action === 'atacar') {
+        isBossPacified = false;
+        typeWriter(`* Você atacou ${currentBossState.name} à força! O monstro ficou instável e contra-ataca furioso!`);
+        startBossTurn();
+    } 
+    else if (action === 'item') {
+        hp = maxHp;
+        document.getElementById('hp-bar-current').style.width = '100%';
+        document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
+        typeWriter("* Você consumiu 'Adubo Orgânico'. Seu HP foi restaurado!");
+    } 
+    else if (action === 'poupar') {
+        if (isBossPacified) {
+            typeWriter(currentBossState.lore + " [POUPADO COM SUCESSO!]");
+            clearAllAttackTimers();
+            setTimeout(() => { nextBoss(); }, 6000);
+        } else {
+            typeWriter(`* ${currentBossState.name} recusa seus termos. Use AGIR com práticas corretas primeiro!`);
+        }
+    }
+}
+
+// Sorteia e dispara um dos 5 ataques do chefe atual durante o turno de defesa (5 segundos)
+function startBossTurn() {
+    clearAllAttackTimers();
+    const attackList = currentBossState.attacks;
+    const randomAttack = attackList[Math.floor(Math.random() * attackList.length)];
+    
+    executePattern(randomAttack);
+    
+    setTimeout(() => {
+        clearAllAttackTimers();
+        if (hp > 0 && !isBossPacified) {
+            typeWriter("* O ataque cessou. O ambiente ainda precisa de ajustes de manejo!");
+        }
+    }, 5000);
+}
+
+// Avança para o próximo chefe ou encerra o jogo no Final Pacifista
+function nextBoss() {
+    gameData.currentBoss++;
+    isBossPacified = false;
+
+    if (gameData.currentBoss < gameData.bosses.length) {
+        currentBossState = gameData.bosses[gameData.currentBoss];
+        bossNameElement.innerText = `* ${currentBossState.name}`;
+        bossSpriteElement.className = currentBossState.spriteClass;
+        typeWriter(currentBossState.intro);
+    } else {
+        bossNameElement.innerText = "* REVOLUÇÃO VERDE";
+        bossSpriteElement.style.backgroundColor = "#00ff00";
+        bossSpriteElement.style.borderRadius = "50%";
+        typeWriter("🌟 FINAL PACIFISTA: Você aplicou todas as diretrizes do Agrinho! O solo prospera, os insetos polinizam em paz e o campo vive em equilíbrio sustentável tecnológico!");
+        clearInterval(gameInterval);
+    }
+}
+
+// Inicialização do Game Loop Principal
+typeWriter(currentBossState.intro);
+gameInterval = setInterval(updateMovement, 1000 / 60);
