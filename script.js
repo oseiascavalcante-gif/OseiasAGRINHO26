@@ -43,11 +43,10 @@ function digitarTexto(texto, i = 0) {
 function mostrarTexto(txt) {
   document.getElementById("texto").innerHTML = "";
   digitarTexto(txt);
-  function atualizarPersonagem() {
-  document.getElementById("personagem").innerText = personagens[fase] || "🌾";
-  
 }
-
+ function atualizarPersonagem() {
+  document.getElementById("personagem").innerText = personagens[fase] || "🌾";
+ }
 function escolher(opcao) {
 
   if (fase === 0) {
