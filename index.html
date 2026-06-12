@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>AgroTale</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>AgroTale</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <!-- 🎬 TRAILER -->
@@ -12,27 +13,18 @@
   <p id="trailer-texto"></p>
 </div>
 
-<!-- 🎬 CUTSCENE -->
-<div id="cutscene">
-  <p id="cutscene-texto"></p>
-</div>
-
 <!-- 🎮 MENU -->
 <div id="start">
   <div class="menu-box">
-
     <h1 class="titulo">🌾 AGROTALE</h1>
 
     <p class="subtitulo">
       Um mundo onde suas escolhas definem o futuro da agricultura e da natureza.
     </p>
 
-    <button class="btn-start" onclick="iniciarJogo()">
-      ▶ INICIAR JORNADA
-    </button>
+    <button class="btn-start" onclick="iniciarJogo()">▶ INICIAR JORNADA</button>
 
     <p class="hint">Use escolhas com sabedoria...</p>
-
   </div>
 </div>
 
@@ -75,20 +67,12 @@
 </div>
 
 <!-- 🏆 FINAL -->
-<div id="dashboard">
-  <h2 id="dash-titulo"></h2>
-  <p id="dash-historia"></p>
+<div id="dashboard"></div>
 
-  <div class="metricas">
-    🌱 Ambiente: <span id="d-ambiente"></span><br>
-    🚜 Produção: <span id="d-producao"></span><br>
-    🏘️ Comunidade: <span id="d-comunidade"></span><br>
-    📊 Média: <span id="d-media"></span><br>
-    🌪️ Estado: <span id="d-crise"></span>
-  </div>
-
-  <br>
-  <button onclick="location.reload()">Jogar novamente</button>
+<!-- 📖 EPÍLOGO -->
+<div id="epilogo">
+  <p id="epilogo-texto"></p>
+  <button onclick="location.reload()">Reiniciar história</button>
 </div>
 
 <script src="script.js"></script>
