@@ -10,6 +10,14 @@ let escolhasSustentaveis = 0;
 
 const personagens = ["🌱", "💧", "🌳", "🚜", "🏘️"];
 
+const impactoFases = [
+  "água",
+  "solo",
+  "floresta",
+  "tecnologia",
+  "comunidade"
+];
+
 const introTextos = [
   "Em uma região chamada Vale Verde...",
   "A produção agrícola cresceu rapidamente...",
@@ -59,7 +67,7 @@ function mostrarIntroTexto(i = 0) {
   }
 }
 
-/* ▶️ START */
+/* ▶️ INÍCIO */
 function iniciarJogo() {
   document.getElementById("start").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -95,6 +103,19 @@ function digitarTexto(texto, i = 0) {
 
 function mostrarTexto(txt) {
   document.getElementById("texto").innerHTML = "";
+
+  let narrativa = [
+    "O equilíbrio do Vale Verde começa a mudar...",
+    "As decisões começam a afetar o ecossistema...",
+    "A região reage às escolhas feitas...",
+    "O impacto se torna mais visível...",
+    "O futuro da comunidade está sendo moldado..."
+  ][fase] || "";
+
+  if (narrativa) {
+    txt = narrativa + "\n\n" + txt;
+  }
+
   digitarTexto(txt);
 }
 
@@ -134,7 +155,7 @@ function escolher(opcao) {
   }
 }
 
-/* 🏁 FINAL MELHORADO COM ESTATÍSTICAS */
+/* 🏁 FINAL */
 function final() {
 
   document.getElementById("botoes").style.display = "none";
@@ -142,49 +163,40 @@ function final() {
   document.getElementById("dialogo").style.display = "none";
   document.getElementById("status").style.display = "none";
 
+  let tendencia = escolhasSustentaveis > 3 ? "SUSTENTÁVEL 🌱" : "PRODUTIVA 🚜";
+  let mediaFinal = Math.round((ambiente + producao + comunidade) / 3);
+  let desequilibrio = Math.abs(ambiente - producao);
+
   let txt = "";
 
-  let mediaAmbiente = ambiente;
-  let mediaProducao = producao;
-  let mediaComunidade = comunidade;
-
-  let tendencia = "";
-
-  if (escolhasSustentaveis >= 4) {
-    tendencia = "SUSTENTÁVEL";
-  } else {
-    tendencia = "PRODUTIVA";
-  }
-
   if (ambiente >= 80 && producao >= 80 && comunidade >= 80) {
-    txt = "FINAL VERDADEIRO: Equilíbrio perfeito alcançado em Vale Verde.";
+    txt = "FINAL VERDADEIRO 🌍\nEquilíbrio perfeito alcançado em Vale Verde.";
   }
 
   else if (escolhasSustentaveis >= 4) {
-    txt = "FINAL SUSTENTÁVEL: Você priorizou o meio ambiente e construiu um futuro equilibrado.";
+    txt = "FINAL SUSTENTÁVEL 🌱\nVocê priorizou o meio ambiente e construiu um futuro equilibrado.";
   }
 
   else if (producao > ambiente + 25) {
-    txt = "FINAL PRODUÇÃO: Crescimento econômico alto, mas com impacto ambiental.";
+    txt = "FINAL PRODUÇÃO 🚜\nCrescimento econômico alto, mas com impacto ambiental.";
   }
 
   else if (ambiente > producao + 25) {
-    txt = "FINAL PRESERVAÇÃO: Natureza protegida, mas produção limitada.";
+    txt = "FINAL PRESERVAÇÃO 🌳\nNatureza protegida, mas produção limitada.";
   }
 
   else {
-    txt = "FINAL NEUTRO: Um equilíbrio instável foi alcançado.";
+    txt = "FINAL NEUTRO ⚖️\nUm equilíbrio instável foi alcançado.";
   }
 
-  let mediaFinal = Math.round((ambiente + producao + comunidade) / 3);
+  txt += "\n\n📊 Resultado do jogador:";
+  txt += "\n🌱 Tendência: " + tendencia;
+  txt += "\n📈 Média geral: " + mediaFinal + "%";
+  txt += "\n⚖️ Desequilíbrio: " + desequilibrio;
+  txt += "\n🌍 Área mais impactada: " + impactoFases[fase - 1];
 
   document.getElementById("fim").style.display = "block";
-
-  document.getElementById("textoFinal").innerText =
-    txt +
-    "\n\n📊 Resultado do jogador:\n" +
-    "🌱 Tendência: " + tendencia +
-    "\n📈 Impacto médio: " + mediaFinal + "%";
+  document.getElementById("textoFinal").innerText = txt;
 }
 
 /* 🔁 REINICIAR */
