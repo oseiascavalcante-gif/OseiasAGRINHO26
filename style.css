@@ -11,86 +11,99 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* 🎬 INTRO */
+/* INTRO */
 #intro {
   display: none;
   height: 100vh;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle, #111, #000);
 }
 
 #introTexto {
   width: 70%;
   font-size: 20px;
-  line-height: 1.8;
   white-space: pre-line;
+  line-height: 1.8;
 }
 
-/* 🔥 START */
+/* START */
 #start {
-  margin-top: 120px;
+  margin-top: 100px;
 }
 
-#start h1 {
-  font-size: 50px;
-  letter-spacing: 6px;
-  text-shadow: 0 0 10px #0f0;
-}
-
-/* 🎮 JOGO */
-#game {
-  margin-top: 20px;
-}
-
-/* 🌱 PERSONAGEM */
+/* PERSONAGEM */
 #personagem {
   font-size: 80px;
-  margin: 10px;
-  filter: drop-shadow(0 0 10px #0f0);
 }
 
-/* 💬 CAIXA */
+/* CAIXA TEXTO */
 #dialogo {
-  border: 3px solid #fff;
-  width: 65%;
-  margin: 20px auto;
-  padding: 20px;
-  min-height: 120px;
-  font-size: 18px;
-  line-height: 1.6;
-  background: rgba(255,255,255,0.03);
+  border: 2px solid white;
+  width: 70%;
+  margin: auto;
+  padding: 15px;
+  min-height: 100px;
 }
 
-/* 🎯 BOTÕES */
+/* BOTÕES */
 button {
-  padding: 10px 20px;
   margin: 10px;
+  padding: 10px 20px;
   background: black;
   color: white;
   border: 2px solid white;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 button:hover {
   background: white;
   color: black;
-  transform: scale(1.05);
 }
 
-/* 📊 STATUS */
-#status {
-  margin-top: 20px;
-  font-size: 14px;
-  opacity: 0.85;
+/* 🎮 HUD */
+#hud {
+  width: 70%;
+  margin: auto;
+  text-align: left;
 }
 
-/* 🏁 FINAL */
-#fim {
-  margin-top: 20px;
+.barra {
+  margin: 10px 0;
+}
+
+.progress {
+  width: 100%;
+  height: 10px;
+  background: #222;
+}
+
+#bar-ambiente,
+#bar-producao,
+#bar-comunidade {
+  height: 10px;
+  width: 50%;
+  transition: 0.3s;
+}
+
+#bar-ambiente { background: #2ecc71; }
+#bar-producao { background: #f39c12; }
+#bar-comunidade { background: #3498db; }
+
+/* 🏆 DASHBOARD */
+#dashboard {
+  display: none;
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  border: 2px solid white;
+  background: rgba(255,255,255,0.05);
+}
+
+.metricas {
+  text-align: left;
+  margin-top: 10px;
 }
