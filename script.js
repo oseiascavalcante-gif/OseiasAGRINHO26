@@ -6,6 +6,8 @@ let fase = 0;
 let travado = false;
 let introIndex = 0;
 
+let eventoAtual = null;
+
 const personagens = ["🌱", "💧", "🌳", "🚜", "🏘️"];
 
 const introTextos = [
@@ -16,44 +18,89 @@ const introTextos = [
   "AGROTALE"
 ];
 
-/* 🌍 DILEMAS REAIS */
+/* 🌍 DILEMAS */
 const fases = [
   {
     texto: "Uma nascente está ameaçada pela expansão agrícola.",
-    a: "Proteger a nascente e limitar irrigação.",
-    b: "Expandir irrigação para aumentar produção.",
+    a: "Proteger a nascente.",
+    b: "Expandir irrigação.",
     efeitoA: { ambiente: 15, producao: -5 },
     efeitoB: { producao: 15, ambiente: -15 }
   },
   {
-    texto: "O solo está perdendo nutrientes importantes.",
-    a: "Recuperar o solo com práticas sustentáveis.",
-    b: "Usar fertilizantes para produção rápida.",
+    texto: "O solo está perdendo nutrientes.",
+    a: "Recuperar o solo.",
+    b: "Usar fertilizantes.",
     efeitoA: { ambiente: 10, producao: 5 },
     efeitoB: { producao: 15, ambiente: -10 }
   },
   {
-    texto: "Uma área de floresta está sob pressão.",
-    a: "Criar área de preservação.",
-    b: "Liberar área para plantio.",
+    texto: "Uma floresta está sob pressão.",
+    a: "Preservar área.",
+    b: "Liberar para plantio.",
     efeitoA: { ambiente: 20 },
     efeitoB: { producao: 20, ambiente: -15 }
   },
   {
-    texto: "Uma nova tecnologia chegou à região.",
-    a: "Usar tecnologia para equilíbrio sustentável.",
-    b: "Usar tecnologia para maximizar produção.",
+    texto: "Tecnologia chegou à região.",
+    a: "Uso sustentável.",
+    b: "Maximizar produção.",
     efeitoA: { ambiente: 10, producao: 10 },
     efeitoB: { producao: 20 }
   },
   {
-    texto: "A comunidade precisa de mais alimentos e renda.",
-    a: "Buscar equilíbrio entre produção e natureza.",
-    b: "Priorizar produção imediata.",
+    texto: "A comunidade precisa de alimentos.",
+    a: "Equilíbrio.",
+    b: "Produção imediata.",
     efeitoA: { comunidade: 10, ambiente: 10 },
     efeitoB: { producao: 15, comunidade: 5 }
   }
 ];
+
+/* 🌪️ EVENTOS ALEATÓRIOS */
+const eventos = [
+  {
+    texto: "🌧️ Chuva forte recuperou parte do solo!",
+    efeito: { ambiente: 10 }
+  },
+  {
+    texto: "🔥 O calor extremo reduziu a produção!",
+    efeito: { producao: -10 }
+  },
+  {
+    texto: "🐝 Polinização aumentou a produtividade!",
+    efeito: { producao: 10 }
+  },
+  {
+    texto: "🏘️ A comunidade pressionou por mudanças sustentáveis!",
+    efeito: { ambiente: 5, comunidade: 10 }
+  },
+  {
+    texto: "🌪️ Tempestade causou danos ambientais!",
+    efeito: { ambiente: -10, producao: -5 }
+  }
+];
+
+/* 🎲 EVENTO ALEATÓRIO */
+function gerarEvento() {
+  if (Math.random() < 0.5) { // 50% de chance
+    eventoAtual = eventos[Math.floor(Math.random() * eventos.length)];
+
+    aplicarEvento(eventoAtual);
+
+    document.getElementById("texto").innerHTML =
+      "⚠️ EVENTO: " + eventoAtual.texto + "<br><br>";
+  } else {
+    eventoAtual = null;
+  }
+}
+
+/* 💥 APLICAR EVENTO */
+function aplicarEvento(ev) {
+  if (ev.efeito.ambiente) ambiente += ev.efeito.ambiente;
+  if (ev.efeito.producao) producao += ev.efeito.producao;
+  if (ev.efeito.comunidade) comunidade += ev.efeito.comunidade;
+}
 
 /* 🎬 INTRO */
 function iniciarIntro() {
@@ -94,7 +141,7 @@ function mostrarIntroTexto() {
   escrever();
 }
 
-/* ▶️ JOGO */
+/* ▶️ INÍCIO */
 function iniciarJogo() {
   document.getElementById("start").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -116,7 +163,12 @@ function atualizarStatus() {
 /* 💬 TEXTO */
 function mostrarTexto() {
   document.getElementById("texto").innerHTML = "";
-  digitarTexto(fases[fase].texto);
+
+  gerarEvento(); // 🔥 EVENTO ALEATÓRIO AQUI
+
+  setTimeout(() => {
+    digitarTexto(fases[fase].texto);
+  }, 500);
 }
 
 /* ✍️ DIGITAÇÃO */
@@ -138,6 +190,7 @@ function escolher(opcao) {
   if (travado) return;
 
   let atual = fases[fase];
+
   let efeito = opcao === "a" ? atual.efeitoA : atual.efeitoB;
 
   if (efeito.ambiente) ambiente += efeito.ambiente;
