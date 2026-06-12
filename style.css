@@ -5,13 +5,12 @@ body {
   font-family: monospace;
   text-align: center;
 }
+
+/* 🎬 INTRO */
 #intro {
   display: none;
   height: 100vh;
   background: black;
-  color: white;
-  font-family: monospace;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -19,47 +18,47 @@ body {
 #introTexto {
   width: 70%;
   font-size: 18px;
-  text-align: center;
-  line-height: 1.5;
+  line-height: 1.6;
 }
-/* START */
+
+/* 🔥 START */
 #start {
   margin-top: 120px;
 }
 
 #start h1 {
   font-size: 48px;
+  letter-spacing: 4px;
 }
 
-/* JOGO */
+/* 🎮 JOGO */
 #game {
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
-/* PERSONAGEM */
+/* 🌱 PERSONAGEM */
 #personagem {
   font-size: 70px;
-  margin: 20px;
-  animation: flutuar 2s infinite ease-in-out;
+  margin: 10px;
 }
 
-@keyframes flutuar {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
-}
-
-/* CAIXA DE TEXTO */
+/* 💬 CAIXA */
 #dialogo {
   border: 3px solid white;
   width: 60%;
-  margin: auto;
+  margin: 20px auto;
   padding: 20px;
   min-height: 120px;
-  box-shadow: 0 0 10px white;
+  background: black;
+  font-size: 18px;
+  line-height: 1.5;
 }
 
-/* BOTÕES */
+/* 🎯 BOTÕES */
+#botoes {
+  margin-top: 15px;
+}
+
 button {
   padding: 10px 20px;
   margin: 10px;
@@ -76,13 +75,14 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* STATUS */
+/* 📊 STATUS */
 #status {
   margin-top: 20px;
   font-size: 14px;
+  opacity: 0.85;
 }
 
-/* FINAL */
+/* 🏁 FINAL */
 #fim {
   margin-top: 20px;
 }
