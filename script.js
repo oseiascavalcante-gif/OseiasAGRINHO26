@@ -6,7 +6,7 @@ let fase = 0;
 let travado = false;
 let introIndex = 0;
 
-let escolhasSustentaveis = 0; // 🧠 memória de escolhas
+let escolhasSustentaveis = 0;
 
 const personagens = ["🌱", "💧", "🌳", "🚜", "🏘️"];
 
@@ -98,11 +98,10 @@ function mostrarTexto(txt) {
   digitarTexto(txt);
 }
 
-/* 🎯 ESCOLHAS AGORA FIXAS */
+/* 🎯 ESCOLHAS */
 function escolher(opcao) {
   if (travado) return;
 
-  // 🌱 OPÇÃO A = sustentável
   if (opcao === 1) {
     escolhasSustentaveis++;
 
@@ -113,7 +112,6 @@ function escolher(opcao) {
     if (fase === 4) { comunidade += 15; ambiente += 5; }
   }
 
-  // 🚜 OPÇÃO B = produtiva
   else {
     if (fase === 0) { producao += 15; ambiente -= 15; }
     if (fase === 1) { producao += 15; ambiente -= 10; }
@@ -122,7 +120,6 @@ function escolher(opcao) {
     if (fase === 4) { producao += 10; comunidade -= 10; }
   }
 
-  // limite seguro
   ambiente = Math.max(0, Math.min(100, ambiente));
   producao = Math.max(0, Math.min(100, producao));
   comunidade = Math.max(0, Math.min(100, comunidade));
@@ -137,7 +134,7 @@ function escolher(opcao) {
   }
 }
 
-/* 🏁 FINAL MELHORADO */
+/* 🏁 FINAL MELHORADO COM ESTATÍSTICAS */
 function final() {
 
   document.getElementById("botoes").style.display = "none";
@@ -147,16 +144,28 @@ function final() {
 
   let txt = "";
 
+  let mediaAmbiente = ambiente;
+  let mediaProducao = producao;
+  let mediaComunidade = comunidade;
+
+  let tendencia = "";
+
+  if (escolhasSustentaveis >= 4) {
+    tendencia = "SUSTENTÁVEL";
+  } else {
+    tendencia = "PRODUTIVA";
+  }
+
   if (ambiente >= 80 && producao >= 80 && comunidade >= 80) {
-    txt = "FINAL VERDADEIRO: Equilíbrio perfeito entre produção e natureza. Vale Verde virou referência mundial.";
+    txt = "FINAL VERDADEIRO: Equilíbrio perfeito alcançado em Vale Verde.";
   }
 
   else if (escolhasSustentaveis >= 4) {
-    txt = "FINAL SUSTENTÁVEL: Suas decisões priorizaram o meio ambiente, garantindo um futuro equilibrado.";
+    txt = "FINAL SUSTENTÁVEL: Você priorizou o meio ambiente e construiu um futuro equilibrado.";
   }
 
   else if (producao > ambiente + 25) {
-    txt = "FINAL PRODUÇÃO: Crescimento econômico alto, mas com forte impacto ambiental.";
+    txt = "FINAL PRODUÇÃO: Crescimento econômico alto, mas com impacto ambiental.";
   }
 
   else if (ambiente > producao + 25) {
@@ -167,8 +176,15 @@ function final() {
     txt = "FINAL NEUTRO: Um equilíbrio instável foi alcançado.";
   }
 
+  let mediaFinal = Math.round((ambiente + producao + comunidade) / 3);
+
   document.getElementById("fim").style.display = "block";
-  document.getElementById("textoFinal").innerText = txt;
+
+  document.getElementById("textoFinal").innerText =
+    txt +
+    "\n\n📊 Resultado do jogador:\n" +
+    "🌱 Tendência: " + tendencia +
+    "\n📈 Impacto médio: " + mediaFinal + "%";
 }
 
 /* 🔁 REINICIAR */
