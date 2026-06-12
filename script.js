@@ -1,7 +1,7 @@
 let ambiente = 50;
 let producao = 50;
 let comunidade = 50;
-
+let travado = false;
 let fase = 0;
 
 const personagens = [
@@ -34,9 +34,13 @@ function atualizarStatus() {
 }
 
 function digitarTexto(texto, i = 0) {
+  travado = true;
+
   if (i < texto.length) {
     document.getElementById("texto").innerHTML += texto.charAt(i);
     setTimeout(() => digitarTexto(texto, i + 1), 20);
+  } else {
+    travado = false;
   }
 }
 
@@ -48,7 +52,8 @@ function mostrarTexto(txt) {
   document.getElementById("personagem").innerText = personagens[fase] || "🌾";
  }
 function escolher(opcao) {
-
+  if (travado) return;
+  
   if (fase === 0) {
     if (opcao === 1) { ambiente += 15; producao -= 5; }
     else { producao += 15; ambiente -= 15; }
@@ -87,6 +92,9 @@ function escolher(opcao) {
 function final() {
 
   document.getElementById("botoes").style.display = "none";
+  document.getElementById("personagem").style.display = "none";
+  document.getElementById("dialogo").style.display = "none";
+  document.getElementById("status").style.display = "none";
 
   let txt = "";
 
@@ -114,6 +122,10 @@ function final() {
   else {
     txt = "FINAL NEUTRO: Um equilíbrio instável foi alcançado.";
   }
+
+  document.getElementById("fim").style.display = "block";
+  document.getElementById("textoFinal").innerText = txt;
+}
 
   mostrarTexto(txt);
 }
