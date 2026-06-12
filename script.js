@@ -261,28 +261,40 @@ function selectAction(action) {
     else if (action === 'item') {
         hp = maxHp;
         document.getElementById('hp-bar-current').style.width = '100%';
+        // Atualiza a interface com a vida atualizada
         document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
         typeWriter("* Você consumiu 'Adubo Orgânico'. Seu HP foi restaurado!");
     } 
     else if (action === 'poupar') {
         if (isBossPacified) {
+            // Exibe a Lore do Agrinho e confirma a vitória pacífica
             typeWriter(currentBossState.lore + " [POUPADO COM SUCESSO!]");
             clearAllAttackTimers();
-            setTimeout(() => { nextBoss(); }, 6000);
+            
+            // Aguarda 6 segundos para o jogador ler a informação antes do próximo chefe
+            setTimeout(() => { 
+                nextBoss(); 
+            }, 6000);
         } else {
+            // Mensagem caso o jogador tente poupar sem corrigir o manejo antes
             typeWriter(`* ${currentBossState.name} recusa seus termos. Use AGIR com práticas corretas primeiro!`);
         }
     }
 }
 
-// Sorteia e dispara um dos 5 ataques do chefe atual durante o turno de defesa (5 segundos)
+/**
+ * Sorteia e dispara um dos 5 ataques do chefe atual 
+ * durante o turno de defesa (com duração de 5 segundos)
+ */
 function startBossTurn() {
     clearAllAttackTimers();
+    
     const attackList = currentBossState.attacks;
     const randomAttack = attackList[Math.floor(Math.random() * attackList.length)];
     
     executePattern(randomAttack);
     
+    // Encerra o turno de ataque após 5 segundos
     setTimeout(() => {
         clearAllAttackTimers();
         if (hp > 0 && !isBossPacified) {
@@ -291,20 +303,28 @@ function startBossTurn() {
     }, 5000);
 }
 
-// Avança para o próximo chefe ou encerra o jogo no Final Pacifista
+/**
+ * Transiciona o estado do jogo para o próximo chefe da fila
+ * ou encerra a partida caso o jogador alcance o Final Pacifista
+ */
 function nextBoss() {
     gameData.currentBoss++;
     isBossPacified = false;
 
+    // Se ainda houverem chefes disponíveis na lista
     if (gameData.currentBoss < gameData.bosses.length) {
         currentBossState = gameData.bosses[gameData.currentBoss];
+        
         bossNameElement.innerText = `* ${currentBossState.name}`;
         bossSpriteElement.className = currentBossState.spriteClass;
+        
         typeWriter(currentBossState.intro);
     } else {
+        // Encerramento do jogo com vitória sustentável total
         bossNameElement.innerText = "* REVOLUÇÃO VERDE";
         bossSpriteElement.style.backgroundColor = "#00ff00";
         bossSpriteElement.style.borderRadius = "50%";
+        
         typeWriter("🌟 FINAL PACIFISTA: Você aplicou todas as diretrizes do Agrinho! O solo prospera, os insetos polinizam em paz e o campo vive em equilíbrio sustentável tecnológico!");
         clearInterval(gameInterval);
     }
