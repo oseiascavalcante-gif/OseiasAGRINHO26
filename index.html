@@ -3,46 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sementes do Destino: Eco-Crônicas</title>
+    <title>AgrinhoTale: Sustentabilidade Subterrânea</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h2>Sementes do Destino: Eco-Crônicas</h2>
+    <div id="game-container">
+        <!-- Exibição do Chefe Atual -->
+        <div id="boss-container">
+            <h2 id="boss-name">* EROSÃO</h2>
+            <div id="boss-sprite" class="sprite-erosao"></div>
+        </div>
 
-    <div id="game-window">
-        <!-- Parte Superior: Arena de Combate -->
+        <!-- Caixa de Texto Estilo Undertale -->
+        <div id="text-box">
+            <p id="dialogue">* Você sente a terra tremer sob seus pés. O solo clama por socorro.</p>
+        </div>
+
+        <!-- Arena de Defesa -->
         <div id="battle-arena">
-            <div id="player-status">HERÓI DO AGRO - HP: 100/100</div>
-            <div id="enemy-name">Carregando criatura...</div>
-            <div id="enemy-sprite">❔</div>
-            
-            <div class="label-bar">HP do Inimigo:</div>
-            <div id="enemy-hp-bar"><div id="enemy-hp-fill"></div></div>
-            
-            <div class="label-bar" style="margin-top: 5px;">MERCY (Piedade):</div>
-            <div id="enemy-mercy-bar"><div id="enemy-mercy-fill"></div></div>
+            <div id="player"></div>
         </div>
 
-        <!-- Parte Central: Caixa de Texto Narrativa -->
-        <div id="dialogue-box">
-            * Você encontrou uma criatura bloqueando a rota sustentável! Prepare-se.
-        </div>
-
-        <!-- Parte Inferior: Botões de Comando Estilo RPG -->
-        <div id="action-menu">
-            <button class="menu-btn" onclick="handleAttack()">⚔️ FIGHT</button>
-            <button class="menu-btn" onclick="handleAct()">💬 ACT</button>
-            <button class="menu-btn" id="spare-btn" onclick="handleSpare()" disabled>💛 SPARE</button>
-        </div>
-
-        <!-- Pop-up do Papel com a Lore Oculta -->
-        <div id="lore-overlay">
-            <div id="lore-scroll">
-                <h3 id="lore-title">📜 Fragmento de Lore Encontrado</h3>
-                <p id="lore-text">Texto da crônica ambiental...</p>
-                <button onclick="closeLore()">Continuar Jornada</button>
+        <!-- HUD de Status e Vida -->
+        <div id="status-bar">
+            <span class="char-name">AGRINHO</span>
+            <span class="char-lv">LV 1</span>
+            <div id="hp-container">
+                <span class="hp-label">HP</span>
+                <div id="hp-bar-max">
+                    <div id="hp-bar-current"></div>
+                </div>
             </div>
+            <span id="hp-text">20 / 20</span>
+        </div>
+
+        <!-- Menu de Ações -->
+        <div id="menu-buttons">
+            <button class="menu-btn active" id="btn-atacar" onclick="selectAction('atacar')">🧡 ATACAR</button>
+            <button class="menu-btn" id="btn-agir" onclick="selectAction('agir')">🧡 AGIR</button>
+            <button class="menu-btn" id="btn-item" onclick="selectAction('item')">🧡 ITEM</button>
+            <button class="menu-btn" id="btn-poupar" onclick="selectAction('poupar')">🧡 POUPAR</button>
         </div>
     </div>
 
