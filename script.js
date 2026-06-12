@@ -28,7 +28,7 @@ const gameData = {
             name: "DESPERDIÇADOR",
             spriteClass: "sprite-desperdiçador",
             intro: "* Uma nuvem negra de fumaça de tratores desregulados surge. DESPERDIÇADOR gasta recursos sem pensar.",
-            actSuccess: "* Você calibrotou os tratores e usou irrigação de precisão. A nuvem negra se dissipa em água limpa!",
+            actSuccess: "* Você calibrou os tratores e usou irrigação de precisão. A nuvem negra se dissipa em água limpa!",
             lore: "LORE: Tecnologia no campo evita desperdício de água e diesel. Produzir com consciência gera eficiência e protege a atmosfera!",
             projClass: "proj-acido",
             attacks: ["chuva_acida", "fumaca_expansiva", "vazamento_oleo", "raio_carbono", "tempestade_total"],
@@ -49,8 +49,6 @@ let isBossPacified = false;
 let gameInterval;
 let activeAttackTimers = [];
 const keys = {};
-
-// Trava lógica para controle anti-bug de cliques simultâneos
 let podeClicar = true;
 
 // Elementos da DOM
@@ -76,24 +74,26 @@ function updateMovement() {
     checkCollisions();
 }
 
-function typeWriter(text) {
+// SISTEMA CORRIGIDO: Exibe uma frase por vez com espaçamento correto
+function typeWriter(text, callback) {
     dialogueElement.innerText = "";
     let i = 0;
     clearInterval(window.typingTimer);
+    
     window.typingTimer = setInterval(() => {
         if (i < text.length) {
             dialogueElement.innerText += text.charAt(i);
             i++;
         } else {
             clearInterval(window.typingTimer);
+            if (callback) callback(); // Só avança ou faz outra ação quando a frase terminar
         }
-    }, 25);
+    }, 30); // Velocidade da digitação ligeiramente ajustada para melhor leitura
 }
 
 function createProjectile(startX, startY, speedX, speedY) {
     const proj = document.createElement('div');
     proj.classList.add('projectile', currentBossState.projClass);
-    
     proj.style.left = startX + 'px';
     proj.style.top = startY + 'px';
     arena.appendChild(proj);
@@ -231,26 +231,29 @@ function alternarBotoes(status) {
 
 function selectAction(action) {
     if (!podeClicar || hp <= 0) return;
-    alternarBotoes(false); // Desativa botões para prevenir cliques repetidos e bugs de fila
+    alternarBotoes(false);
 
     if (action === 'agir') {
         isBossPacified = true;
-        typeWriter(currentBossState.actSuccess);
-        setTimeout(startBossTurn, 2500);
+        // Mostra a frase do AGIR, e SÓ DEPOIS que ela terminar, inicia o ataque do chefe
+        typeWriter(currentBossState.actSuccess, () => {
+            setTimeout(startBossTurn, 2000);
+        });
     } 
     else if (action === 'atacar') {
         isBossPacified = false;
         currentBossState.hp -= 30; 
         if (currentBossState.hp < 0) currentBossState.hp = 0;
-        
-        bossHpBar.style.width = (currentBossState.hp / currentBossState.maxHp * 100) + '%';
+                bossHpBar.style.width = (currentBossState.hp / currentBossState.maxHp * 100) + '%';
         
         if (currentBossState.hp <= 0) {
-            typeWriter(`* Você derrotou ${currentBossState.name} pela força brutal! A terra estremece de forma instável.`);
-            setTimeout(nextBoss, 3000);
+            typeWriter(`* Você derrotou ${currentBossState.name} pela força brutal! A terra estremece de forma instável.`, () => {
+                setTimeout(nextBoss, 2500);
+            });
         } else {
-            typeWriter(`* Você golpeou ${currentBossState.name}! O monstro ficou instável e contra-ataca furiosamente!`);
-            setTimeout(startBossTurn, 2500);
+            typeWriter(`* Você golpeou ${currentBossState.name}! O monstro ficou instável e contra-ataca furiosamente!`, () => {
+                setTimeout(startBossTurn, 2000);
+            });
         }
     } 
     else if (action === 'item') {
@@ -258,17 +261,21 @@ function selectAction(action) {
         document.getElementById('hp-bar-current').style.width = '100%';
         document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
         
-        typeWriter("* Você consumiu 'Adubo Orgânico'. Seu HP foi restaurado!");
-        setTimeout(startBossTurn, 2500);
+        typeWriter("* Você consumiu 'Adubo Orgânico'. Seu HP foi restaurado!", () => {
+            setTimeout(startBossTurn, 2000);
+        });
     } 
     else if (action === 'poupar') {
         if (isBossPacified) {
-            typeWriter(currentBossState.lore + " [POUPADO COMPLEMENTE!]");
-            clearAllAttackTimers();
-            setTimeout(nextBoss, 6000);
+            // Mostra a Lore com espaçamento correto, e depois transiciona de Chefe
+            typeWriter(currentBossState.lore + "  [POUPADO COMPLEMENTE!]", () => {
+                clearAllAttackTimers();
+                setTimeout(nextBoss, 4000);
+            });
         } else {
-            typeWriter(`* ${currentBossState.name} recusa seus termos. Use AGIR com práticas corretas primeiro!`);
-            setTimeout(() => { alternarBotoes(true); }, 2500);
+            typeWriter(`* ${currentBossState.name} recusa seus termos. Use AGIR com práticas corretas primeiro!`, () => {
+                setTimeout(() => { alternarBotoes(true); }, 1500);
+            });
         }
     }
 }
@@ -284,8 +291,9 @@ function startBossTurn() {
     setTimeout(() => {
         clearAllAttackTimers();
         if (hp > 0) {
-            typeWriter("* O ataque cessou. O ambiente ainda precisa de ajustes de manejo!");
-            alternarBotoes(true); // Restaura o controle do menu apenas ao fim do turno
+            typeWriter("* O ataque cessou. O ambiente ainda precisa de ajustes de manejo!", () => {
+                alternarBotoes(true);
+            });
         }
     }, 5000);
 }
@@ -300,8 +308,9 @@ function nextBoss() {
         bossSpriteElement.className = currentBossState.spriteClass;
         bossHpBar.style.width = '100%';
         
-        typeWriter(currentBossState.intro);
-        setTimeout(() => { alternarBotoes(true); }, 2000);
+        typeWriter(currentBossState.intro, () => {
+            setTimeout(() => { alternarBotoes(true); }, 1000);
+        });
     } else {
         bossNameElement.innerText = "* REVOLUÇÃO VERDE";
         bossSpriteElement.style.backgroundColor = "#00ff00";
@@ -313,6 +322,9 @@ function nextBoss() {
     }
 }
 
-// Inicialização
-typeWriter(currentBossState.intro);
+// Inicialização segura
+typeWriter(currentBossState.intro, () => {
+    alternarBotoes(true);
+});
 gameInterval = setInterval(updateMovement, 1000 / 60);
+
