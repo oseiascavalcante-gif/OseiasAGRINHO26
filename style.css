@@ -6,7 +6,6 @@ body {
   text-align: center;
 }
 
-/* 🌫️ ANIMAÇÃO GLOBAL */
 #intro, #start, #game {
   animation: fadeIn 0.8s ease-in;
 }
@@ -65,7 +64,6 @@ body {
   font-size: 18px;
   line-height: 1.6;
   background: rgba(255,255,255,0.03);
-  box-shadow: 0 0 15px rgba(255,255,255,0.1);
 }
 
 /* 🎯 BOTÕES */
