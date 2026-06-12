@@ -6,6 +6,8 @@ let fase = 0;
 let travado = false;
 let introIndex = 0;
 
+let escolhasSustentaveis = 0; // 🧠 memória de escolhas
+
 const personagens = ["🌱", "💧", "🌳", "🚜", "🏘️"];
 
 const introTextos = [
@@ -57,7 +59,7 @@ function mostrarIntroTexto(i = 0) {
   }
 }
 
-/* ▶️ START JOGO */
+/* ▶️ START */
 function iniciarJogo() {
   document.getElementById("start").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -76,7 +78,7 @@ function atualizarStatus() {
     personagens[fase] || "🌾";
 }
 
-/* 🔤 DIGITAÇÃO */
+/* 🔤 TEXTO */
 function digitarTexto(texto, i = 0) {
   travado = true;
 
@@ -96,36 +98,31 @@ function mostrarTexto(txt) {
   digitarTexto(txt);
 }
 
-/* 🎯 ESCOLHAS */
+/* 🎯 ESCOLHAS AGORA FIXAS */
 function escolher(opcao) {
   if (travado) return;
 
-  if (fase === 0) {
-    if (opcao === 1) { ambiente += 15; producao -= 5; }
-    else { producao += 15; ambiente -= 15; }
+  // 🌱 OPÇÃO A = sustentável
+  if (opcao === 1) {
+    escolhasSustentaveis++;
+
+    if (fase === 0) { ambiente += 15; producao -= 5; }
+    if (fase === 1) { ambiente += 10; producao += 5; }
+    if (fase === 2) { ambiente += 15; comunidade += 5; }
+    if (fase === 3) { ambiente += 10; producao += 5; }
+    if (fase === 4) { comunidade += 15; ambiente += 5; }
   }
 
-  if (fase === 1) {
-    if (opcao === 1) { ambiente += 10; producao += 10; }
-    else { producao += 15; ambiente -= 10; }
+  // 🚜 OPÇÃO B = produtiva
+  else {
+    if (fase === 0) { producao += 15; ambiente -= 15; }
+    if (fase === 1) { producao += 15; ambiente -= 10; }
+    if (fase === 2) { producao += 15; ambiente -= 15; }
+    if (fase === 3) { producao += 10; producao += 5; }
+    if (fase === 4) { producao += 10; comunidade -= 10; }
   }
 
-  if (fase === 2) {
-    if (opcao === 1) { ambiente += 15; comunidade += 5; }
-    else { producao += 15; ambiente -= 15; }
-  }
-
-  if (fase === 3) {
-    if (opcao === 1) { producao += 10; ambiente += 10; }
-    else { producao -= 5; }
-  }
-
-  if (fase === 4) {
-    if (opcao === 1) { comunidade += 15; ambiente += 5; }
-    else { producao += 10; comunidade -= 10; }
-  }
-
-  // limite de valores
+  // limite seguro
   ambiente = Math.max(0, Math.min(100, ambiente));
   producao = Math.max(0, Math.min(100, producao));
   comunidade = Math.max(0, Math.min(100, comunidade));
@@ -140,7 +137,7 @@ function escolher(opcao) {
   }
 }
 
-/* 🏁 FINAL */
+/* 🏁 FINAL MELHORADO */
 function final() {
 
   document.getElementById("botoes").style.display = "none";
@@ -151,17 +148,21 @@ function final() {
   let txt = "";
 
   if (ambiente >= 80 && producao >= 80 && comunidade >= 80) {
-    txt = "FINAL VERDADEIRO: Você alcançou o equilíbrio perfeito. Vale Verde virou exemplo mundial de sustentabilidade.";
+    txt = "FINAL VERDADEIRO: Equilíbrio perfeito entre produção e natureza. Vale Verde virou referência mundial.";
   }
-  else if (ambiente >= 70 && producao >= 70) {
-    txt = "FINAL DOURADO: Desenvolvimento sustentável atingido.";
+
+  else if (escolhasSustentaveis >= 4) {
+    txt = "FINAL SUSTENTÁVEL: Suas decisões priorizaram o meio ambiente, garantindo um futuro equilibrado.";
   }
+
   else if (producao > ambiente + 25) {
-    txt = "FINAL PRODUÇÃO: Alta produção, mas colapso ambiental.";
+    txt = "FINAL PRODUÇÃO: Crescimento econômico alto, mas com forte impacto ambiental.";
   }
+
   else if (ambiente > producao + 25) {
-    txt = "FINAL PRESERVAÇÃO: Natureza preservada, produção limitada.";
+    txt = "FINAL PRESERVAÇÃO: Natureza protegida, mas produção limitada.";
   }
+
   else {
     txt = "FINAL NEUTRO: Um equilíbrio instável foi alcançado.";
   }
@@ -175,7 +176,7 @@ function reiniciar() {
   location.reload();
 }
 
-/* 🚀 START AUTOMÁTICO */
+/* 🚀 START */
 window.onload = function () {
   iniciarIntro();
 };
