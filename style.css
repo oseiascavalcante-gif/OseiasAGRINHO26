@@ -29,13 +29,13 @@ body {
 #boss-container {
     text-align: center;
     margin-bottom: 10px;
-    height: 160px;
+    height: 180px;
 }
 
 #boss-name {
     font-size: 32px;
     letter-spacing: 2px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 #boss-sprite {
@@ -49,6 +49,22 @@ body {
 .sprite-erosao { background: #5c4033; border-radius: 20% 20% 0 0; border: 4px solid #fff; }
 .sprite-praga { background: #2e8b57; border-radius: 50%; border: 4px dashed #ff0000; }
 .sprite-desperdiçador { background: #4a4a4a; border-radius: 10px; border: 4px double #00ffff; }
+
+/* Estrutura da Barra de Vida do Chefe */
+#boss-hp-container {
+    width: 150px;
+    height: 12px;
+    background-color: #444;
+    border: 2px solid #fff;
+    margin: 8px auto 0 auto;
+}
+
+#boss-hp-bar {
+    width: 100%;
+    height: 100%;
+    background-color: #ff0000;
+    transition: width 0.3s ease;
+}
 
 #text-box {
     width: 100%;
@@ -92,7 +108,7 @@ body {
 .proj-inseto { background-color: #ff0033; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
 .proj-acido { background-color: #00ffcc; border-radius: 50% 50% 0 0; }
 
-/* HUD */
+/* HUD do Jogador */
 #status-bar {
     width: 100%;
     display: flex;
@@ -140,7 +156,14 @@ body {
     text-align: center;
 }
 
-.menu-btn:hover, .menu-btn.active {
+.menu-btn:hover:not(:disabled) {
     color: #ffff00;
     border-color: #ffff00;
+}
+
+/* Estilo para Botões Bloqueados/Desativados */
+.menu-btn:disabled {
+    color: #555 !important;
+    border-color: #555 !important;
+    cursor: not-allowed;
 }
