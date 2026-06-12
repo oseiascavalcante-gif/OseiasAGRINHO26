@@ -1,24 +1,28 @@
 body {
   margin: 0;
-  background: #000;
-  color: #fff;
   font-family: monospace;
+  color: white;
   text-align: center;
+
+  /* 🌄 FUNDO FAZENDA ANIMADO */
+  background: linear-gradient(#0b3d0b, #1f6b1f, #2e8b2e);
+  background-size: 400% 400%;
+  animation: farmSky 12s ease infinite;
 }
 
-/* 🔥 CORREÇÃO PRINCIPAL: CENTRALIZAÇÃO DO JOGO */
-html, body {
+@keyframes farmSky {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  width: 100%;
   height: 100%;
-  overflow-x: hidden;
-}
-
-/* todas as telas principais ficam centralizadas */
-#start, #game, #intro {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 /* CUTSCENE */
@@ -29,14 +33,9 @@ html, body {
   width: 100%;
   height: 100%;
   background: black;
-  color: white;
-
   display: none;
   align-items: center;
   justify-content: center;
-
-  font-size: 22px;
-  padding: 40px;
   z-index: 999;
 }
 
@@ -46,28 +45,77 @@ html, body {
   line-height: 1.6;
 }
 
-/* INTRO */
-#introTexto {
-  width: 70%;
-  font-size: 20px;
-  white-space: pre-line;
+/* MENU RPG */
+#start {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* PERSONAGEM */
+.menu-box {
+  border: 2px solid white;
+  padding: 30px;
+  width: 60%;
+  background: rgba(0,0,0,0.5);
+  animation: floatMenu 3s ease-in-out infinite;
+}
+
+@keyframes floatMenu {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.titulo {
+  font-size: 40px;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 5px #00ff88; }
+  to { text-shadow: 0 0 20px #00ff88; }
+}
+
+.subtitulo {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.btn-start {
+  margin-top: 15px;
+  padding: 12px 25px;
+  border: 2px solid white;
+  background: black;
+  cursor: pointer;
+}
+
+.btn-start:hover {
+  background: white;
+  color: black;
+}
+
+/* JOGO */
+#game {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 #personagem {
   font-size: 80px;
 }
 
-/* CAIXA DE TEXTO */
 #dialogo {
   border: 2px solid white;
   width: 70%;
-  margin: 10px auto;
   padding: 15px;
   min-height: 100px;
+  margin: 10px;
 }
 
-/* BOTÕES */
 button {
   margin: 10px;
   padding: 10px 20px;
@@ -85,7 +133,6 @@ button:hover {
 /* HUD */
 #hud {
   width: 70%;
-  margin-top: 20px;
   text-align: left;
 }
 
@@ -111,14 +158,14 @@ button:hover {
 #bar-producao { background: #f39c12; }
 #bar-comunidade { background: #3498db; }
 
-/* DASHBOARD */
+/* FINAL */
 #dashboard {
   display: none;
   width: 80%;
   margin: auto;
   padding: 20px;
   border: 2px solid white;
-  background: rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.6);
 }
 
 .metricas {
