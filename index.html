@@ -7,19 +7,31 @@
 </head>
 <body>
 
+<!-- 🎬 CUTSCENE -->
 <div id="cutscene">
   <p id="cutscene-texto"></p>
 </div>
 
-<div id="intro">
-  <p id="introTexto"></p>
-</div>
-
+<!-- 🎮 MENU RPG -->
 <div id="start">
-  <h1>AGROTALE</h1>
-  <button onclick="iniciarJogo()">START</button>
+  <div class="menu-box">
+
+    <h1 class="titulo">🌾 AGROTALE</h1>
+
+    <p class="subtitulo">
+      Um mundo onde suas escolhas definem o futuro da agricultura e da natureza.
+    </p>
+
+    <button class="btn-start" onclick="iniciarJogo()">
+      ▶ INICIAR JORNADA
+    </button>
+
+    <p class="hint">Use escolhas com sabedoria...</p>
+
+  </div>
 </div>
 
+<!-- 🎮 JOGO -->
 <div id="game" style="display:none">
 
   <div id="personagem">🌱</div>
@@ -33,7 +45,9 @@
     <button onclick="escolher('b')">🚜 Opção B</button>
   </div>
 
+  <!-- 🎮 HUD -->
   <div id="hud">
+
     <div class="barra">
       🌱 Ambiente
       <div class="progress"><div id="bar-ambiente"></div></div>
@@ -51,10 +65,12 @@
       <div class="progress"><div id="bar-comunidade"></div></div>
       <span id="comunidade">50</span>
     </div>
+
   </div>
 
 </div>
 
+<!-- 🏆 FINAL -->
 <div id="dashboard">
   <h2 id="dash-titulo"></h2>
   <p id="dash-historia"></p>
