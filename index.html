@@ -3,55 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgrinhoTale: Sustentabilidade Subterrânea</title>
+    <title>Agro Forte e Sustentável</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="game-container">
-        <!-- Exibição do Chefe Atual e sua Barra de Vida -->
-        <div id="boss-container">
-            <h2 id="boss-name">* EROSÃO</h2>
-            <div id="boss-sprite" class="sprite-erosao"></div>
-            
-            <!-- Barra de Vida do Chefe -->
-            <div id="boss-hp-container">
-                <div id="boss-hp-bar"></div>
-            </div>
-        </div>
+<div id="game">
 
-        <!-- Caixa de Texto Estilo Undertale -->
-        <div id="text-box">
-            <p id="dialogue">* Você sente a terra tremer sob seus pés. O solo clama por socorro.</p>
-        </div>
-
-        <!-- Arena de Defesa -->
-        <div id="battle-arena">
-            <div id="player"></div>
-        </div>
-
-        <!-- HUD de Status e Vida do Jogador -->
-        <div id="status-bar">
-            <span class="char-name">AGRINHO</span>
-            <span class="char-lv">LV 1</span>
-            <div id="hp-container">
-                <span class="hp-label">HP</span>
-                <div id="hp-bar-max">
-                    <div id="hp-bar-current"></div>
-                </div>
-            </div>
-            <span id="hp-text">20 / 20</span>
-        </div>
-
-        <!-- Menu de Ações -->
-        <div id="menu-buttons">
-            <button class="menu-btn" id="btn-atacar" onclick="selectAction('atacar')">🧡 ATACAR</button>
-            <button class="menu-btn" id="btn-agir" onclick="selectAction('agir')">🧡 AGIR</button>
-            <button class="menu-btn" id="btn-item" onclick="selectAction('item')">🧡 ITEM</button>
-            <button class="menu-btn" id="btn-poupar" onclick="selectAction('poupar')">🧡 POUPAR</button>
-        </div>
+    <div id="titleScreen">
+        <h1>AGRO FORTE E SUSTENTÁVEL</h1>
+        <p>Uma jornada pela sustentabilidade</p>
+        <button id="startBtn">INICIAR</button>
     </div>
 
-    <script src="script.js"></script>
+    <div id="battleScreen" class="hidden">
+
+        <div id="bossArea">
+            <h2 id="bossName">Seca Extrema</h2>
+            <div id="bossSprite"></div>
+            <div id="bossHPBar">
+                <div id="bossHP"></div>
+            </div>
+        </div>
+
+        <canvas id="battleCanvas" width="600" height="250"></canvas>
+
+        <div id="dialogueBox">
+            <p id="dialogueText">
+                Bem-vindo ao Agro Forte e Sustentável.
+            </p>
+        </div>
+
+        <div id="menu">
+            <button class="actionBtn" data-action="fight">FIGHT</button>
+            <button class="actionBtn" data-action="act">ACT</button>
+            <button class="actionBtn" data-action="item">ITEM</button>
+            <button class="actionBtn" data-action="spare">SPARE</button>
+        </div>
+
+        <div id="playerInfo">
+            <span>HP:</span>
+            <div id="playerHPBar">
+                <div id="playerHP"></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
