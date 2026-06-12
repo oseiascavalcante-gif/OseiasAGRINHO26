@@ -29,14 +29,43 @@
     <button onclick="escolher('b')">🚜 Opção B</button>
   </div>
 
-  <div id="status">
-    🌱 Ambiente: <span id="ambiente">50</span> |
-    🚜 Produção: <span id="producao">50</span> |
-    🏘️ Comunidade: <span id="comunidade">50</span>
+  <!-- 🎮 HUD -->
+  <div id="hud">
+
+    <div class="barra">
+      🌱 Ambiente
+      <div class="progress"><div id="bar-ambiente"></div></div>
+      <span id="ambiente">50</span>
+    </div>
+
+    <div class="barra">
+      🚜 Produção
+      <div class="progress"><div id="bar-producao"></div></div>
+      <span id="producao">50</span>
+    </div>
+
+    <div class="barra">
+      🏘️ Comunidade
+      <div class="progress"><div id="bar-comunidade"></div></div>
+      <span id="comunidade">50</span>
+    </div>
+
   </div>
 
-  <div id="fim" style="display:none">
-    <h2 id="textoFinal"></h2>
+  <!-- 🏆 DASHBOARD FINAL -->
+  <div id="dashboard">
+    <h2 id="dash-titulo"></h2>
+    <p id="dash-historia"></p>
+
+    <div class="metricas">
+      🌱 Ambiente: <span id="d-ambiente"></span><br>
+      🚜 Produção: <span id="d-producao"></span><br>
+      🏘️ Comunidade: <span id="d-comunidade"></span><br>
+      📊 Média: <span id="d-media"></span><br>
+      🌪️ Estado: <span id="d-crise"></span>
+    </div>
+
+    <br>
     <button onclick="reiniciar()">Jogar novamente</button>
   </div>
 
