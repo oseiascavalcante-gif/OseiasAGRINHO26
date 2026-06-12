@@ -74,7 +74,7 @@ function updateMovement() {
     checkCollisions();
 }
 
-// SISTEMA CORRIGIDO: Exibe uma frase por vez com espaçamento correto
+// COMENTÁRIO DE AJUSTE: Força espaços rígidos para evitar que o HTML junte as palavras
 function typeWriter(text, callback) {
     dialogueElement.innerText = "";
     let i = 0;
@@ -82,13 +82,17 @@ function typeWriter(text, callback) {
     
     window.typingTimer = setInterval(() => {
         if (i < text.length) {
-            dialogueElement.innerText += text.charAt(i);
+            if (text.charAt(i) === " ") {
+                dialogueElement.innerText += "\u00A0"; 
+            } else {
+                dialogueElement.innerText += text.charAt(i);
+            }
             i++;
         } else {
             clearInterval(window.typingTimer);
-            if (callback) callback(); // Só avança ou faz outra ação quando a frase terminar
+            if (callback) callback();
         }
-    }, 30); // Velocidade da digitação ligeiramente ajustada para melhor leitura
+    }, 25);
 }
 
 function createProjectile(startX, startY, speedX, speedY) {
@@ -235,7 +239,6 @@ function selectAction(action) {
 
     if (action === 'agir') {
         isBossPacified = true;
-        // Mostra a frase do AGIR, e SÓ DEPOIS que ela terminar, inicia o ataque do chefe
         typeWriter(currentBossState.actSuccess, () => {
             setTimeout(startBossTurn, 2000);
         });
@@ -244,87 +247,85 @@ function selectAction(action) {
         isBossPacified = false;
         currentBossState.hp -= 30; 
         if (currentBossState.hp < 0) currentBossState.hp = 0;
-                bossHpBar.style.width = (currentBossState.hp / currentBossState.maxHp * 100) + '%';
+        
+        bossHpBar.style.width = (currentBossState.hp / currentBossState.maxHp * 100) + '%';
         
         if (currentBossState.hp <= 0) {
-            typeWriter(`* Você derrotou ${currentBossState.name} pela força brutal! A terra estremece de forma instável.`, () => {
-                setTimeout(nextBoss, 2500);
-            });
-        } else {
-            typeWriter(`* Você golpeou ${currentBossState.name}! O monstro ficou instável e contra-ataca furiosamente!`, () => {
-                setTimeout(startBossTurn, 2000);
-            });
-        }
-    } 
-    else if (action === 'item') {
-        hp = maxHp;
-        document.getElementById('hp-bar-current').style.width = '100%';
-        document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
-        
-        typeWriter("* Você consumiu 'Adubo Orgânico'. Seu HP foi restaurado!", () => {
+            setTimeout(nextBoss, 2500);
+        });
+    } else {
+        typeWriter(`* Você golpeou ${currentBossState.name}! O monstro ficou instável e contra-ataca furiosamente!`, () => {
             setTimeout(startBossTurn, 2000);
         });
-    } 
-    else if (action === 'poupar') {
-        if (isBossPacified) {
-            // Mostra a Lore com espaçamento correto, e depois transiciona de Chefe
-            typeWriter(currentBossState.lore + "  [POUPADO COMPLEMENTE!]", () => {
-                clearAllAttackTimers();
-                setTimeout(nextBoss, 4000);
-            });
-        } else {
-            typeWriter(`* ${currentBossState.name} recusa seus termos. Use AGIR com práticas corretas primeiro!`, () => {
-                setTimeout(() => { alternarBotoes(true); }, 1500);
-            });
-        }
     }
+} 
+else if (action === 'item') {
+    hp = maxHp;
+    document.getElementById('hp-bar-current').style.width = '100%';
+    document.getElementById('hp-text').innerText = `${hp} / ${maxHp}`;
+    
+    typeWriter("* Você consumiu 'Adubo Orgânico'. Seu HP foi restaurado!", () => {
+        setTimeout(startBossTurn, 2000);
+    });
+} 
+else if (action === 'poupar') {
+    if (isBossPacified) {
+        typeWriter(currentBossState.lore + "  [POUPADO COMPLEMENTE!]", () => {
+            clearAllAttackTimers();
+            setTimeout(nextBoss, 4000);
+        });
+    } else {
+        typeWriter(`* ${currentBossState.name} recusa seus termos. Use AGIR com práticas corretas primeiro!`, () => {
+            setTimeout(() => { alternarBotoes(true); }, 1500);
+        });
+    }
+}
 }
 
 function startBossTurn() {
-    if (hp <= 0 || currentBossState.hp <= 0) return;
+if (hp <= 0 || currentBossState.hp <= 0) return;
+clearAllAttackTimers();
+
+const attackList = currentBossState.attacks;
+const randomAttack = attackList[Math.floor(Math.random() * attackList.length)];
+executePattern(randomAttack);
+
+setTimeout(() => {
     clearAllAttackTimers();
-    
-    const attackList = currentBossState.attacks;
-    const randomAttack = attackList[Math.floor(Math.random() * attackList.length)];
-    executePattern(randomAttack);
-    
-    setTimeout(() => {
-        clearAllAttackTimers();
-        if (hp > 0) {
-            typeWriter("* O ataque cessou. O ambiente ainda precisa de ajustes de manejo!", () => {
-                alternarBotoes(true);
-            });
-        }
-    }, 5000);
+    if (hp > 0) {
+        typeWriter("* O ataque cessou. O ambiente ainda precisa de ajustes de manejo!", () => {
+            alternarBotoes(true);
+        });
+    }
+}, 5000);
 }
 
 function nextBoss() {
-    gameData.currentBoss++;
-    isBossPacified = false;
+gameData.currentBoss++;
+isBossPacified = false;
 
-    if (gameData.currentBoss < gameData.bosses.length) {
-        currentBossState = gameData.bosses[gameData.currentBoss];
-        bossNameElement.innerText = `* ${currentBossState.name}`;
-        bossSpriteElement.className = currentBossState.spriteClass;
-        bossHpBar.style.width = '100%';
-        
-        typeWriter(currentBossState.intro, () => {
-            setTimeout(() => { alternarBotoes(true); }, 1000);
-        });
-    } else {
-        bossNameElement.innerText = "* REVOLUÇÃO VERDE";
-        bossSpriteElement.style.backgroundColor = "#00ff00";
-        bossSpriteElement.style.borderRadius = "50%";
-        if (bossHpBar.parentElement) bossHpBar.parentElement.remove();
-        
-        typeWriter("🌟 FINAL PACIFISTA: Você aplicou todas as diretrizes do Agrinho! O solo prospera, os insetos polinizam em paz e o campo vive em equilíbrio sustentável tecnológico!");
-        clearInterval(gameInterval);
-    }
+if (gameData.currentBoss < gameData.bosses.length) {
+    currentBossState = gameData.bosses[gameData.currentBoss];
+    bossNameElement.innerText = `* ${currentBossState.name}`;
+    bossSpriteElement.className = currentBossState.spriteClass;
+    bossHpBar.style.width = '100%';
+    
+    typeWriter(currentBossState.intro, () => {
+        setTimeout(() => { alternarBotoes(true); }, 1000);
+    });
+} else {
+    bossNameElement.innerText = "* REVOLUÇÃO VERDE";
+    bossSpriteElement.style.backgroundColor = "#00ff00";
+    bossSpriteElement.style.borderRadius = "50%";
+    if (bossHpBar.parentElement) bossHpBar.parentElement.remove();
+    
+    typeWriter("🌟 FINAL PACIFISTA: Você aplicou todas as diretrizes do Agrinho! O solo prospera, os insetos polinizam em paz e o campo vive em equilíbrio sustentável tecnológico!");
+    clearInterval(gameInterval);
+}
 }
 
 // Inicialização segura
 typeWriter(currentBossState.intro, () => {
-    alternarBotoes(true);
+alternarBotoes(true);
 });
 gameInterval = setInterval(updateMovement, 1000 / 60);
-
