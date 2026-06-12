@@ -1,40 +1,95 @@
 body {
+  margin: 0;
   background: black;
   color: white;
   font-family: monospace;
   text-align: center;
 }
 
+/* 🔥 TELA INICIAL */
 #start {
-  margin-top: 100px;
+  margin-top: 120px;
 }
 
 #start h1 {
-  font-size: 40px;
+  font-size: 48px;
+  letter-spacing: 4px;
+}
+
+#start button {
+  margin-top: 20px;
+}
+
+/* 🎮 ÁREA DO JOGO */
+#game {
+  margin-top: 40px;
+}
+
+/* 🌱 PERSONAGEM */
+#personagem {
+  font-size: 70px;
+  margin: 20px;
+  animation: flutuar 2s infinite ease-in-out;
+}
+
+@keyframes flutuar {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+/* 💬 CAIXA DE DIÁLOGO */
+#dialogo {
+  border: 3px solid white;
+  width: 60%;
+  margin: auto;
+  padding: 20px;
+  min-height: 120px;
+  background: black;
+  font-size: 18px;
+}
+
+/* 🎯 BOTÕES */
+#botoes {
+  margin-top: 20px;
 }
 
 button {
   padding: 10px 20px;
+  margin: 10px;
   background: black;
   color: white;
   border: 2px solid white;
   cursor: pointer;
-  margin-top: 10px;
+  font-family: monospace;
+  transition: 0.2s;
 }
 
 button:hover {
   background: white;
   color: black;
+  transform: scale(1.05);
 }
 
-#dialogo {
-  border: 2px solid white;
-  width: 60%;
-  margin: auto;
-  padding: 20px;
-  min-height: 100px;
-}
-
+/* 📊 STATUS */
 #status {
-  margin-top: 20px;
+  margin-top: 25px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ✨ efeito leve de “jogo antigo” */
+#dialogo {
+  box-shadow: 0 0 10px white;
+}
+
+/* 📱 RESPONSIVO BÁSICO */
+@media (max-width: 768px) {
+  #dialogo {
+    width: 85%;
+  }
+
+  #personagem {
+    font-size: 55px;
+  }
 }
