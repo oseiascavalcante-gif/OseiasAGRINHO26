@@ -7,6 +7,12 @@
 </head>
 <body>
 
+<!-- 🎬 CUTSCENE -->
+<div id="cutscene">
+  <p id="cutscene-texto"></p>
+</div>
+
+<!-- 🎬 INTRO -->
 <div id="intro">
   <p id="introTexto"></p>
 </div>
@@ -31,7 +37,6 @@
 
   <!-- 🎮 HUD -->
   <div id="hud">
-
     <div class="barra">
       🌱 Ambiente
       <div class="progress"><div id="bar-ambiente"></div></div>
@@ -49,26 +54,25 @@
       <div class="progress"><div id="bar-comunidade"></div></div>
       <span id="comunidade">50</span>
     </div>
-
   </div>
 
-  <!-- 🏆 DASHBOARD FINAL -->
-  <div id="dashboard">
-    <h2 id="dash-titulo"></h2>
-    <p id="dash-historia"></p>
+</div>
 
-    <div class="metricas">
-      🌱 Ambiente: <span id="d-ambiente"></span><br>
-      🚜 Produção: <span id="d-producao"></span><br>
-      🏘️ Comunidade: <span id="d-comunidade"></span><br>
-      📊 Média: <span id="d-media"></span><br>
-      🌪️ Estado: <span id="d-crise"></span>
-    </div>
+<!-- 🏆 FINAL DASHBOARD -->
+<div id="dashboard">
+  <h2 id="dash-titulo"></h2>
+  <p id="dash-historia"></p>
 
-    <br>
-    <button onclick="reiniciar()">Jogar novamente</button>
+  <div class="metricas">
+    🌱 Ambiente: <span id="d-ambiente"></span><br>
+    🚜 Produção: <span id="d-producao"></span><br>
+    🏘️ Comunidade: <span id="d-comunidade"></span><br>
+    📊 Média: <span id="d-media"></span><br>
+    🌪️ Estado: <span id="d-crise"></span>
   </div>
 
+  <br>
+  <button onclick="reiniciar()">Jogar novamente</button>
 </div>
 
 <script src="script.js"></script>
