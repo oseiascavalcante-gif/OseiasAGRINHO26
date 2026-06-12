@@ -28,7 +28,6 @@ const textos = [
 function iniciarIntro() {
   document.getElementById("intro").style.display = "flex";
   document.getElementById("introTexto").innerText = "";
-
   mostrarIntroTexto();
 }
 
@@ -52,13 +51,13 @@ function mostrarIntroTexto(i = 0) {
         setTimeout(() => {
           document.getElementById("intro").style.display = "none";
           document.getElementById("start").style.display = "block";
-        }, 1000);
+        }, 500);
       }
     }, 1000);
   }
 }
 
-/* ▶️ INÍCIO DO JOGO */
+/* ▶️ START JOGO */
 function iniciarJogo() {
   document.getElementById("start").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -81,11 +80,14 @@ function atualizarStatus() {
 function digitarTexto(texto, i = 0) {
   travado = true;
 
+  document.getElementById("botoes").style.pointerEvents = "none";
+
   if (i < texto.length) {
     document.getElementById("texto").innerHTML += texto.charAt(i);
     setTimeout(() => digitarTexto(texto, i + 1), 20);
   } else {
     travado = false;
+    document.getElementById("botoes").style.pointerEvents = "auto";
   }
 }
 
@@ -123,6 +125,11 @@ function escolher(opcao) {
     else { producao += 10; comunidade -= 10; }
   }
 
+  // limite de valores
+  ambiente = Math.max(0, Math.min(100, ambiente));
+  producao = Math.max(0, Math.min(100, producao));
+  comunidade = Math.max(0, Math.min(100, comunidade));
+
   fase++;
   atualizarStatus();
 
@@ -144,7 +151,7 @@ function final() {
   let txt = "";
 
   if (ambiente >= 80 && producao >= 80 && comunidade >= 80) {
-    txt = "FINAL VERDADEIRO: Equilíbrio perfeito alcançado em Vale Verde.";
+    txt = "FINAL VERDADEIRO: Você alcançou o equilíbrio perfeito. Vale Verde virou exemplo mundial de sustentabilidade.";
   }
   else if (ambiente >= 70 && producao >= 70) {
     txt = "FINAL DOURADO: Desenvolvimento sustentável atingido.";
