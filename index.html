@@ -1,54 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agro Forte e Sustentável</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>AgroTale</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="game">
 
-    <div id="titleScreen">
-        <h1>AGRO FORTE E SUSTENTÁVEL</h1>
-        <p>Uma jornada pela sustentabilidade</p>
-        <button id="startBtn">INICIAR</button>
-    </div>
+  <div id="dialogo">
+    <p id="texto">Bem-vindo a Vale Verde...</p>
+  </div>
 
-    <div id="battleScreen" class="hidden">
+  <div id="botoes">
+    <button onclick="escolher(1)">Opção A</button>
+    <button onclick="escolher(2)">Opção B</button>
+  </div>
 
-        <div id="bossArea">
-            <h2 id="bossName">Seca Extrema</h2>
-            <div id="bossSprite"></div>
-            <div id="bossHPBar">
-                <div id="bossHP"></div>
-            </div>
-        </div>
-
-        <canvas id="battleCanvas" width="600" height="250"></canvas>
-
-        <div id="dialogueBox">
-            <p id="dialogueText">
-                Bem-vindo ao Agro Forte e Sustentável.
-            </p>
-        </div>
-
-        <div id="menu">
-            <button class="actionBtn" data-action="fight">FIGHT</button>
-            <button class="actionBtn" data-action="act">ACT</button>
-            <button class="actionBtn" data-action="item">ITEM</button>
-            <button class="actionBtn" data-action="spare">SPARE</button>
-        </div>
-
-        <div id="playerInfo">
-            <span>HP:</span>
-            <div id="playerHPBar">
-                <div id="playerHP"></div>
-            </div>
-        </div>
-
-    </div>
+  <div id="status">
+    🌱 Ambiente: <span id="ambiente">50</span> |
+    🚜 Produção: <span id="producao">50</span> |
+    🏘️ Comunidade: <span id="comunidade">50</span>
+  </div>
 
 </div>
 
