@@ -6,13 +6,19 @@ body {
   text-align: center;
 }
 
-/* 🔥 CORREÇÃO DO PROBLEMA DE TEXTO JUNTO */
-#texto,
-#cutscene-texto,
-#dash-historia,
-#dash-titulo {
-  white-space: pre-line;
-  line-height: 1.6;
+/* 🔥 CORREÇÃO PRINCIPAL: CENTRALIZAÇÃO DO JOGO */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* todas as telas principais ficam centralizadas */
+#start, #game, #intro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* CUTSCENE */
@@ -36,24 +42,15 @@ body {
 
 #cutscene-texto {
   width: 70%;
+  white-space: pre-line;
+  line-height: 1.6;
 }
 
 /* INTRO */
-#intro {
-  display: none;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-}
-
 #introTexto {
   width: 70%;
   font-size: 20px;
-}
-
-/* START */
-#start {
-  margin-top: 100px;
+  white-space: pre-line;
 }
 
 /* PERSONAGEM */
@@ -61,11 +58,11 @@ body {
   font-size: 80px;
 }
 
-/* TEXTO */
+/* CAIXA DE TEXTO */
 #dialogo {
   border: 2px solid white;
   width: 70%;
-  margin: auto;
+  margin: 10px auto;
   padding: 15px;
   min-height: 100px;
 }
@@ -88,7 +85,7 @@ button:hover {
 /* HUD */
 #hud {
   width: 70%;
-  margin: auto;
+  margin-top: 20px;
   text-align: left;
 }
 
