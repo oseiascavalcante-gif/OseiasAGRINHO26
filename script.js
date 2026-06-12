@@ -6,8 +6,6 @@ let fase = 0;
 let travado = false;
 let introIndex = 0;
 
-let eventoAtual = null;
-
 const personagens = ["🌱", "💧", "🌳", "🚜", "🏘️"];
 
 const introTextos = [
@@ -57,49 +55,26 @@ const fases = [
   }
 ];
 
-/* 🌪️ EVENTOS ALEATÓRIOS */
+/* 🌪️ EVENTOS */
 const eventos = [
-  {
-    texto: "🌧️ Chuva forte recuperou parte do solo!",
-    efeito: { ambiente: 10 }
-  },
-  {
-    texto: "🔥 O calor extremo reduziu a produção!",
-    efeito: { producao: -10 }
-  },
-  {
-    texto: "🐝 Polinização aumentou a produtividade!",
-    efeito: { producao: 10 }
-  },
-  {
-    texto: "🏘️ A comunidade pressionou por mudanças sustentáveis!",
-    efeito: { ambiente: 5, comunidade: 10 }
-  },
-  {
-    texto: "🌪️ Tempestade causou danos ambientais!",
-    efeito: { ambiente: -10, producao: -5 }
-  }
+  { texto: "🌧️ Chuva melhorou o solo!", efeito: { ambiente: 10 } },
+  { texto: "🔥 O calor reduziu a produção!", efeito: { producao: -10 } },
+  { texto: "🐝 Polinização aumentou a produção!", efeito: { producao: 10 } },
+  { texto: "🌪️ Tempestade causou danos!", efeito: { ambiente: -10, producao: -5 } },
+  { texto: "🏘️ Comunidade pediu mais sustentabilidade!", efeito: { comunidade: 10, ambiente: 5 } }
 ];
 
-/* 🎲 EVENTO ALEATÓRIO */
 function gerarEvento() {
-  if (Math.random() < 0.5) { // 50% de chance
-    eventoAtual = eventos[Math.floor(Math.random() * eventos.length)];
-
-    aplicarEvento(eventoAtual);
+  if (Math.random() < 0.5) {
+    let ev = eventos[Math.floor(Math.random() * eventos.length)];
 
     document.getElementById("texto").innerHTML =
-      "⚠️ EVENTO: " + eventoAtual.texto + "<br><br>";
-  } else {
-    eventoAtual = null;
-  }
-}
+      "⚠️ EVENTO: " + ev.texto + "<br><br>";
 
-/* 💥 APLICAR EVENTO */
-function aplicarEvento(ev) {
-  if (ev.efeito.ambiente) ambiente += ev.efeito.ambiente;
-  if (ev.efeito.producao) producao += ev.efeito.producao;
-  if (ev.efeito.comunidade) comunidade += ev.efeito.comunidade;
+    if (ev.efeito.ambiente) ambiente += ev.efeito.ambiente;
+    if (ev.efeito.producao) producao += ev.efeito.producao;
+    if (ev.efeito.comunidade) comunidade += ev.efeito.comunidade;
+  }
 }
 
 /* 🎬 INTRO */
@@ -163,12 +138,8 @@ function atualizarStatus() {
 /* 💬 TEXTO */
 function mostrarTexto() {
   document.getElementById("texto").innerHTML = "";
-
-  gerarEvento(); // 🔥 EVENTO ALEATÓRIO AQUI
-
-  setTimeout(() => {
-    digitarTexto(fases[fase].texto);
-  }, 500);
+  gerarEvento();
+  setTimeout(() => digitarTexto(fases[fase].texto), 500);
 }
 
 /* ✍️ DIGITAÇÃO */
@@ -190,7 +161,6 @@ function escolher(opcao) {
   if (travado) return;
 
   let atual = fases[fase];
-
   let efeito = opcao === "a" ? atual.efeitoA : atual.efeitoB;
 
   if (efeito.ambiente) ambiente += efeito.ambiente;
@@ -211,6 +181,14 @@ function escolher(opcao) {
   }
 }
 
+/* 🌪️ CRISE AMBIENTAL */
+function calcularCrise() {
+  if (ambiente < 30) return "🔥 CRISE AMBIENTAL";
+  if (ambiente < 50) return "⚠️ ALERTA AMBIENTAL";
+  if (producao > 80 && ambiente < 60) return "⚠️ PRESSÃO ECOLÓGICA";
+  return "🌱 ESTABILIDADE";
+}
+
 /* 🏁 FINAL */
 function final() {
 
@@ -220,6 +198,7 @@ function final() {
   document.getElementById("status").style.display = "none";
 
   let media = Math.round((ambiente + producao + comunidade) / 3);
+  let crise = calcularCrise();
 
   let txt = "";
 
@@ -237,6 +216,7 @@ function final() {
   }
 
   txt += "\n\n📊 Média geral: " + media + "%";
+  txt += "\n🌪️ Estado do mundo: " + crise;
 
   document.getElementById("fim").style.display = "block";
   document.getElementById("textoFinal").innerText = txt;
