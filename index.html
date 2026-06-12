@@ -9,10 +9,15 @@
 <body>
 
     <div id="game-container">
-        <!-- Exibição do Chefe Atual -->
+        <!-- Exibição do Chefe Atual e sua Barra de Vida -->
         <div id="boss-container">
             <h2 id="boss-name">* EROSÃO</h2>
             <div id="boss-sprite" class="sprite-erosao"></div>
+            
+            <!-- Barra de Vida do Chefe -->
+            <div id="boss-hp-container">
+                <div id="boss-hp-bar"></div>
+            </div>
         </div>
 
         <!-- Caixa de Texto Estilo Undertale -->
@@ -25,7 +30,7 @@
             <div id="player"></div>
         </div>
 
-        <!-- HUD de Status e Vida -->
+        <!-- HUD de Status e Vida do Jogador -->
         <div id="status-bar">
             <span class="char-name">AGRINHO</span>
             <span class="char-lv">LV 1</span>
@@ -40,7 +45,7 @@
 
         <!-- Menu de Ações -->
         <div id="menu-buttons">
-            <button class="menu-btn active" id="btn-atacar" onclick="selectAction('atacar')">🧡 ATACAR</button>
+            <button class="menu-btn" id="btn-atacar" onclick="selectAction('atacar')">🧡 ATACAR</button>
             <button class="menu-btn" id="btn-agir" onclick="selectAction('agir')">🧡 AGIR</button>
             <button class="menu-btn" id="btn-item" onclick="selectAction('item')">🧡 ITEM</button>
             <button class="menu-btn" id="btn-poupar" onclick="selectAction('poupar')">🧡 POUPAR</button>
