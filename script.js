@@ -56,12 +56,12 @@ function mostrarIntroTexto(i = 0) {
       introIndex++;
 
       if (introIndex < introTextos.length) {
-        mostrarIntroTexto(0);
+        setTimeout(() => mostrarIntroTexto(0), 600);
       } else {
         setTimeout(() => {
           document.getElementById("intro").style.display = "none";
           document.getElementById("start").style.display = "block";
-        }, 500);
+        }, 800);
       }
     }, 1000);
   }
