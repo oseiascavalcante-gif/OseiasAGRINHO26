@@ -4,7 +4,20 @@ let comunidade = 50;
 
 let fase = 0;
 
-const texto = document.getElementById("texto");
+const textos = [
+  "Uma nascente está ameaçada por uma nova plantação...",
+  "O solo começa a perder nutrientes...",
+  "Uma mata pode ser recuperada ou usada para expansão...",
+  "Novas tecnologias chegam à região...",
+  "A comunidade precisa decidir seu futuro..."
+];
+
+function iniciarJogo() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  mostrarTexto(textos[0]);
+  atualizarStatus();
+}
 
 function atualizarStatus() {
   document.getElementById("ambiente").innerText = ambiente;
@@ -12,80 +25,50 @@ function atualizarStatus() {
   document.getElementById("comunidade").innerText = comunidade;
 }
 
-function mostrarFase() {
-  const fases = [
-    "Uma nascente está ameaçada por uma nova plantação. O que fazer?",
-    "O solo começa a perder nutrientes. Como agir?",
-    "Uma mata pode ser recuperada ou usada para expansão agrícola.",
-    "Novas tecnologias chegam à região.",
-    "A comunidade precisa de decisões sobre o futuro."
-  ];
+function digitarTexto(texto, i = 0) {
+  if (i < texto.length) {
+    document.getElementById("texto").innerHTML += texto.charAt(i);
+    setTimeout(() => digitarTexto(texto, i + 1), 20);
+  }
+}
 
-  texto.innerText = fases[fase];
+function mostrarTexto(txt) {
+  document.getElementById("texto").innerHTML = "";
+  digitarTexto(txt);
 }
 
 function escolher(opcao) {
 
-  // Fase 1
   if (fase === 0) {
-    if (opcao === 1) {
-      ambiente += 15;
-      producao -= 5;
-    } else {
-      producao += 15;
-      ambiente -= 15;
-    }
+    if (opcao === 1) { ambiente += 15; producao -= 5; }
+    else { producao += 15; ambiente -= 15; }
   }
 
-  // Fase 2
   if (fase === 1) {
-    if (opcao === 1) {
-      ambiente += 10;
-      producao += 10;
-    } else {
-      producao += 15;
-      ambiente -= 10;
-    }
+    if (opcao === 1) { ambiente += 10; producao += 10; }
+    else { producao += 15; ambiente -= 10; }
   }
 
-  // Fase 3
   if (fase === 2) {
-    if (opcao === 1) {
-      ambiente += 15;
-      comunidade += 5;
-    } else {
-      producao += 15;
-      ambiente -= 15;
-    }
+    if (opcao === 1) { ambiente += 15; comunidade += 5; }
+    else { producao += 15; ambiente -= 15; }
   }
 
-  // Fase 4
   if (fase === 3) {
-    if (opcao === 1) {
-      producao += 10;
-      ambiente += 10;
-    } else {
-      producao -= 5;
-    }
+    if (opcao === 1) { producao += 10; ambiente += 10; }
+    else { producao -= 5; }
   }
 
-  // Fase 5
   if (fase === 4) {
-    if (opcao === 1) {
-      comunidade += 15;
-      ambiente += 5;
-    } else {
-      producao += 10;
-      comunidade -= 10;
-    }
+    if (opcao === 1) { comunidade += 15; ambiente += 5; }
+    else { producao += 10; comunidade -= 10; }
   }
 
   fase++;
-
   atualizarStatus();
 
-  if (fase < 5) {
-    mostrarFase();
+  if (fase < textos.length) {
+    mostrarTexto(textos[fase]);
   } else {
     final();
   }
@@ -95,22 +78,20 @@ function final() {
 
   document.getElementById("botoes").style.display = "none";
 
+  let txt = "";
+
   if (ambiente >= 70 && producao >= 70 && comunidade >= 70) {
-    texto.innerText = "FINAL DOURADO: Equilíbrio perfeito em Vale Verde. Agro forte e sustentável.";
+    txt = "FINAL DOURADO: Vale Verde virou exemplo de equilíbrio sustentável.";
   }
-
-  else if (ambiente > producao) {
-    texto.innerText = "FINAL PRESERVAÇÃO: A natureza floresceu, mas a produção foi limitada.";
-  }
-
   else if (producao > ambiente + 20) {
-    texto.innerText = "FINAL PRODUÇÃO: Alta produção, mas o meio ambiente foi degradado.";
+    txt = "FINAL PRODUÇÃO: Crescimento alto, mas com degradação ambiental.";
   }
-
+  else if (ambiente > producao) {
+    txt = "FINAL PRESERVAÇÃO: Natureza protegida, mas produção limitada.";
+  }
   else {
-    texto.innerText = "FINAL SUSTENTÁVEL: Um equilíbrio foi alcançado em Vale Verde.";
+    txt = "FINAL EQUILÍBRIO: Um meio-termo foi alcançado.";
   }
-}
 
-mostrarFase();
-atualizarStatus();
+  mostrarTexto(txt);
+}
