@@ -1,23 +1,18 @@
 let ambiente = 50;
 let producao = 50;
 let comunidade = 50;
-let travado = false;
-let fase = 0;
 
-const personagens = [
-  "🌱",
-  "💧",
-  "🌳",
-  "🚜",
-  "🏘️"
-];
+let fase = 0;
+let travado = false;
+
+const personagens = ["🌱", "💧", "🌳", "🚜", "🏘️"];
 
 const textos = [
-  "Uma nascente está ameaçada por uma nova plantação...",
-  "O solo começa a perder nutrientes...",
-  "Uma mata pode ser recuperada ou usada para expansão...",
-  "Novas tecnologias chegam à região...",
-  "A comunidade precisa decidir seu futuro..."
+  "Uma nascente está ameaçada por uma plantação.",
+  "O solo começa a perder nutrientes.",
+  "Uma mata pode ser recuperada ou expandida.",
+  "Novas tecnologias chegam à região.",
+  "A comunidade precisa de decisões sobre o futuro."
 ];
 
 function iniciarJogo() {
@@ -31,8 +26,12 @@ function atualizarStatus() {
   document.getElementById("ambiente").innerText = ambiente;
   document.getElementById("producao").innerText = producao;
   document.getElementById("comunidade").innerText = comunidade;
+
+  document.getElementById("personagem").innerText =
+    personagens[fase] || "🌾";
 }
 
+/* 🔤 DIGITAÇÃO */
 function digitarTexto(texto, i = 0) {
   travado = true;
 
@@ -48,12 +47,11 @@ function mostrarTexto(txt) {
   document.getElementById("texto").innerHTML = "";
   digitarTexto(txt);
 }
- function atualizarPersonagem() {
-  document.getElementById("personagem").innerText = personagens[fase] || "🌾";
- }
+
+/* 🎯 ESCOLHAS */
 function escolher(opcao) {
   if (travado) return;
-  
+
   if (fase === 0) {
     if (opcao === 1) { ambiente += 15; producao -= 5; }
     else { producao += 15; ambiente -= 15; }
@@ -80,8 +78,9 @@ function escolher(opcao) {
   }
 
   fase++;
+
   atualizarStatus();
-  atualizarPersonagem();
+
   if (fase < textos.length) {
     mostrarTexto(textos[fase]);
   } else {
@@ -89,6 +88,7 @@ function escolher(opcao) {
   }
 }
 
+/* 🏁 FINAL */
 function final() {
 
   document.getElementById("botoes").style.display = "none";
@@ -98,27 +98,18 @@ function final() {
 
   let txt = "";
 
-  // ⭐ FINAL SECRETO (EQUILÍBRIO PERFEITO REAL)
   if (ambiente >= 80 && producao >= 80 && comunidade >= 80) {
-    txt = "FINAL VERDADEIRO: Você encontrou o equilíbrio perfeito entre natureza, produção e comunidade. Vale Verde virou um exemplo mundial de sustentabilidade.";
+    txt = "FINAL VERDADEIRO: Equilíbrio perfeito alcançado em Vale Verde.";
   }
-
-  // 🌱 FINAL SUSTENTÁVEL
   else if (ambiente >= 70 && producao >= 70) {
-    txt = "FINAL DOURADO: Desenvolvimento sustentável alcançado com sucesso.";
+    txt = "FINAL DOURADO: Desenvolvimento sustentável atingido.";
   }
-
-  // 🚜 FINAL PRODUÇÃO
   else if (producao > ambiente + 25) {
-    txt = "FINAL PRODUÇÃO: Alta produtividade, mas o meio ambiente entrou em colapso.";
+    txt = "FINAL PRODUÇÃO: Alta produção, mas colapso ambiental.";
   }
-
-  // 🌳 FINAL PRESERVAÇÃO
   else if (ambiente > producao + 25) {
-    txt = "FINAL PRESERVAÇÃO: A natureza foi protegida, mas a produção não sustentou a comunidade.";
+    txt = "FINAL PRESERVAÇÃO: Natureza preservada, produção limitada.";
   }
-
-  // ⚖️ FINAL NEUTRO
   else {
     txt = "FINAL NEUTRO: Um equilíbrio instável foi alcançado.";
   }
@@ -127,5 +118,7 @@ function final() {
   document.getElementById("textoFinal").innerText = txt;
 }
 
-  mostrarTexto(txt);
+/* 🔁 REINICIAR */
+function reiniciar() {
+  location.reload();
 }
