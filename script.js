@@ -37,37 +37,43 @@ const textos = [
 /* 🎬 INTRO */
 function iniciarIntro() {
   document.getElementById("intro").style.display = "flex";
-  document.getElementById("introTexto").innerText = "";
+  document.getElementById("introTexto").innerHTML = "";
+  introIndex = 0;
   mostrarIntroTexto();
 }
 
-function mostrarIntroTexto(i = 0) {
+/* 🔥 INTRO CORRIGIDA (SEM TEXTO COLADO) */
+function mostrarIntroTexto() {
   let texto = introTextos[introIndex];
+  let el = document.getElementById("introTexto");
 
-  if (i === 0) {
-    document.getElementById("introTexto").innerText = "";
-  }
+  let i = 0;
+  el.innerHTML = "";
 
-  if (i < texto.length) {
-    document.getElementById("introTexto").innerText += texto.charAt(i);
-    setTimeout(() => mostrarIntroTexto(i + 1), 40);
-  } else {
-    // 🔥 FORÇA QUEBRA DE LINHA ENTRE FRASES
-    document.getElementById("introTexto").innerText += "\n\n";
+  function escrever() {
+    if (i < texto.length) {
+      el.innerHTML += texto[i];
+      i++;
+      setTimeout(escrever, 40);
+    } else {
+      el.innerHTML += "<br><br>"; // quebra real de linha
 
-    setTimeout(() => {
       introIndex++;
 
-      if (introIndex < introTextos.length) {
-        mostrarIntroTexto(0);
-      } else {
-        setTimeout(() => {
-          document.getElementById("intro").style.display = "none";
-          document.getElementById("start").style.display = "block";
-        }, 800);
-      }
-    }, 800);
+      setTimeout(() => {
+        if (introIndex < introTextos.length) {
+          mostrarIntroTexto();
+        } else {
+          setTimeout(() => {
+            document.getElementById("intro").style.display = "none";
+            document.getElementById("start").style.display = "block";
+          }, 800);
+        }
+      }, 800);
+    }
   }
+
+  escrever();
 }
 
 /* ▶️ INÍCIO */
