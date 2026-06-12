@@ -10,7 +10,6 @@ body {
 #intro {
   display: none;
   height: 100vh;
-  background: black;
   align-items: center;
   justify-content: center;
 }
@@ -49,15 +48,13 @@ body {
   margin: 20px auto;
   padding: 20px;
   min-height: 120px;
-  background: black;
   font-size: 18px;
   line-height: 1.5;
 }
 
-/* ✅ CORREÇÃO DO TEXTO JUNTANDO */
+/* 🔤 TEXTO LIMPO */
 #dialogo p {
   white-space: pre-wrap;
-  word-wrap: break-word;
   overflow-wrap: break-word;
   display: block;
 }
