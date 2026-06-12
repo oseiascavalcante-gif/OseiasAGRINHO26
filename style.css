@@ -4,7 +4,6 @@ body {
   color: white;
   text-align: center;
 
-  /* 🌄 FUNDO FAZENDA ANIMADO */
   background: linear-gradient(#0b3d0b, #1f6b1f, #2e8b2e);
   background-size: 400% 400%;
   animation: farmSky 12s ease infinite;
@@ -16,13 +15,24 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-body::before {
-  content: "";
+/* TRAILER */
+#trailer {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.08;
-  pointer-events: none;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#trailer-texto {
+  width: 70%;
+  white-space: pre-line;
+  line-height: 1.8;
 }
 
 /* CUTSCENE */
@@ -45,7 +55,7 @@ body::before {
   line-height: 1.6;
 }
 
-/* MENU RPG */
+/* MENU */
 #start {
   min-height: 100vh;
   display: flex;
@@ -95,7 +105,7 @@ body::before {
   color: black;
 }
 
-/* JOGO */
+/* GAME */
 #game {
   min-height: 100vh;
   display: flex;
